@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" colorMatched="YES" initialViewController="cdV-t2-NdZ">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--View Controller-->
+        <scene sceneID="ZBr-7q-pAk">
+            <objects>
+                <viewController id="cdV-t2-NdZ" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="erx-EG-23v">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LaunchImage" translatesAutoresizingMaskIntoConstraints="NO" id="Laq-bC-moq">
+                                <rect key="frame" x="50" y="320" width="314" height="256"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" red="0.2470588235" green="0.72549019609999998" blue="0.23137254900000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="Laq-bC-moq" firstAttribute="centerX" secondItem="erx-EG-23v" secondAttribute="centerX" id="8BS-QN-v6A"/>
+                            <constraint firstAttribute="trailing" secondItem="Laq-bC-moq" secondAttribute="trailing" constant="50" id="Q0I-Uf-cPH"/>
+                            <constraint firstItem="Laq-bC-moq" firstAttribute="centerY" secondItem="erx-EG-23v" secondAttribute="centerY" id="Yal-72-mU2"/>
+                            <constraint firstItem="Laq-bC-moq" firstAttribute="leading" secondItem="erx-EG-23v" secondAttribute="leading" constant="50" id="czi-tP-tqy"/>
+                        </constraints>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="iBR-Id-oC0" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="139" y="201"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="LaunchImage" width="256" height="256"/>
+    </resources>
+</document>
