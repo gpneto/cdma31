@@ -74,7 +74,7 @@ class AppLocalizations {
 "select_product":"Select Product"
 
     },
-    "pt_BR": {
+    "pt": {
       "user": "Usuário",
       "pass": "Senha",
       "log_out": "Sair",
@@ -131,7 +131,7 @@ class AppLocalizations {
   /// This method returns the localized value of the passed id
   /// it defaults to english if the locale is missing
   String _localizedValue(String id) =>
-      _localizedValues[locale.toString()][id] ?? _localizedValues["en"][id];
+      _localizedValues[locale.languageCode][id] ?? _localizedValues["en"][id];
 
   // Auth
   String get user {
@@ -364,8 +364,7 @@ class AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
   const AppLocalizationsDelegate();
 
   @override
-  bool isSupported(Locale locale) =>
-      ["en", "pt_BR"].contains(locale.toString());
+  bool isSupported(Locale locale) => ["en", "pt"].contains(locale.languageCode);
 
   @override
   Future<AppLocalizations> load(Locale locale) {

@@ -198,9 +198,10 @@ class _ApplicationState extends State<Application> {
                 ),
               ),
               localizationsDelegates: localizationsDelegates,
+//              locale: const Locale("pt", "BR"),
               supportedLocales: [
                 const Locale("en", "EN"),
-                const Locale("pt_BR", "PT"),
+                const Locale("pt", "BR"),
               ],
               navigatorKey: _navigatorKey,
               onGenerateRoute: (settings) {
