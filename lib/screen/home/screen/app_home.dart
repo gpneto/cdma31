@@ -1,4 +1,5 @@
 
+import 'package:cdma31/screen/categoria/cadastro_categoria.dart';
 import 'package:cdma31/screen/config/home.dart';
 import 'package:cdma31/screen/lista/lista_compras.dart';
 import 'package:cdma31/screen/produtos/cadastro_produtos.dart';
@@ -25,7 +26,8 @@ class AppHomeTheme extends HomeAbstract {
     var home = AppHomeTheme(key, context, stateHome);
     home.menusDisponiveis = [
       ListaCompras(context),
-      CadastroProdutos(context)
+      CadastroProdutos(context),
+      CadastroCategoria(context)
     ];
     Prefs.singleton()
         .addListenerForPref(Prefs.MENUS_DISABLED_PREF, home.changeListenerMenu);
@@ -50,8 +52,9 @@ class AppHomeTheme extends HomeAbstract {
 
 
     menusDisponiveis.asMap().forEach((index, menu) {
-      if (menuList.where((t) => t == menu.title).length == 0) {
+      if (menuList.where((t) => t == menu.id).length == 0) {
         MenuItem menuItem = MenuItem(
+            id: menu.id,
             nome: menu.title,
             menu: TabItem(
                 menu.iosIcon, menu.title, Colors.blue,
@@ -69,7 +72,7 @@ class AppHomeTheme extends HomeAbstract {
 
     ordemMenus.asMap().forEach((index, menu) {
       int draggingIndex = menus.indexWhere((bt) {
-        return bt.nome == menu;
+        return bt.id == menu;
       });
 
       if (draggingIndex != -1) {
@@ -85,9 +88,10 @@ class AppHomeTheme extends HomeAbstract {
 
     ConfigPage config = ConfigPage(pai: stateHome);
 
-    titleConfig = config.title;
+    titleConfig = config.id;
 
     MenuItem menuItem = MenuItem(
+        id: config.id,
         nome: config.title,
         menu: TabItem(FontAwesomeIcons.userCog, config.title, Colors.teal,
             labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
@@ -199,7 +203,7 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
       selectedCallback: (int selectedPos) {
         setState(() {
           widget.homeAbstract.menus[selectedPos].beforeOpen();
-          if (widget.homeAbstract.menus[selectedPos].nome == widget.titleConfig) {
+          if (widget.homeAbstract.menus[selectedPos].id == widget.titleConfig) {
             isInConfig = true;
           } else {
             isInConfig = false;

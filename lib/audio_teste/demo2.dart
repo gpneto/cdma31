@@ -33,7 +33,7 @@ class _MyAppState extends State<AudioTesteDemo> {
   Widget build(BuildContext context) {
     return  Scaffold(
         appBar: AppBar(
-          title: const Text('Flutter Sound'),
+          title: const Text('Audios'),
         ),
         body: MainBody(),
       );

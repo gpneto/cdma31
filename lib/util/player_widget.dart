@@ -155,8 +155,8 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   }
 
   Future<int> _getDuration() async {
-//    File audiofile = await audioCache.loadFromUrl(widget.url);
-    File audiofile = await audioCache.load(widget.url);
+    File audiofile = await audioCache.loadFromUrl(widget.url);
+//    File audiofile = await audioCache.load(widget.url);
 
     await _audioPlayer.setUrl(
       audiofile.path,

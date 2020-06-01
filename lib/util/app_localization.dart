@@ -66,12 +66,20 @@ class AppLocalizations {
       "android_native": "Android Native",
       "ios_native": "iOS Native",
       "version": "Version",
-      "delete" : "Delete",
-      "camera" : "Camera",
-      "gallery" : "Gallery",
-      "new_list" : "New List",
-      "add" : "Add",
-"select_product":"Select Product"
+      "delete": "Delete",
+      "camera": "Camera",
+      "gallery": "Gallery",
+      "new_list": "New List",
+      "add": "Add",
+      "select_product": "Select Product",
+      "category": "Category",
+      "categories": "Categories",
+      "search_categories": "Searching Categories...",
+      "no_categories": "No Categories!",
+      "removed_category": "Removed Category",
+      "name_of_category": "Nome of Category",
+      "new_product": "New Product",
+
 
     },
     "pt": {
@@ -119,12 +127,19 @@ class AppLocalizations {
       "android_native": "Android Nativo",
       "ios_native": "iOS Nativo",
       "version": "Versão",
-      "delete" : "Excluir",
-      "camera" : "Câmera",
-      "gallery" : "Galeria",
-      "new_list" : "Nova Lista",
-      "add" : "Adicionar",
-      "select_product": "Selecione o Produto"
+      "delete": "Excluir",
+      "camera": "Câmera",
+      "gallery": "Galeria",
+      "new_list": "Nova Lista",
+      "add": "Adicionar",
+      "select_product": "Selecione o Produto",
+      "category": "Categoria",
+      "categories": "Categorias",
+      "search_categories": "Buscando Categorias...",
+      "no_categories": "Sem Categorias!",
+      "removed_category": "Categoria Removido",
+      "name_of_category": "Nome do Categoria",
+      "new_product": "Novo Produto",
     }
   };
 
@@ -304,7 +319,6 @@ class AppLocalizations {
     return _localizedValue("ios_native");
   }
 
-
   String get androidNative {
     return _localizedValue("android_native");
   }
@@ -321,7 +335,6 @@ class AppLocalizations {
     return _localizedValue("camera");
   }
 
-
   String get gallery {
     return _localizedValue("gallery");
   }
@@ -330,7 +343,6 @@ class AppLocalizations {
     return _localizedValue("new_list");
   }
 
-
   String get add {
     return _localizedValue("add");
   }
@@ -338,6 +350,41 @@ class AppLocalizations {
   String get selectProduct {
     return _localizedValue("select_product");
   }
+
+  String get category {
+    return _localizedValue("category");
+  }
+
+  String get categories {
+    return _localizedValue("categories");
+  }
+
+  String get searchCategories {
+    return _localizedValue("search_categories");
+  }
+
+
+  String get noCategories {
+    return _localizedValue("no_categories");
+  }
+
+
+  String get removedCategory {
+    return _localizedValue("removed_category");
+  }
+
+
+  String get nameOfCategory {
+    return _localizedValue("name_of_category");
+  }
+
+
+  String get newProduct {
+    return _localizedValue("new_product");
+  }
+
+
+
 
 
 

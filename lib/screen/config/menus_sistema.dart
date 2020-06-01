@@ -1,3 +1,4 @@
+import 'package:cdma31/screen/lista/lista_compras.dart';
 import 'package:cdma31/screen/produtos/cadastro_produtos.dart';
 import 'package:cdma31/util/app_localization.dart';
 import 'package:cdma31/util/prefs.dart';
@@ -8,6 +9,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 
 import '../../app_config.dart';
+import '../base_stateless_screen.dart';
 import 'info_list_section.dart';
 
 class MenusSistema extends StatefulWidget {
@@ -30,6 +32,7 @@ class _MenusSistemaState extends State<MenusSistema> {
   @override
   void initState() {
     super.initState();
+    menusDisponiveis = [ListaCompras(context),CadastroProdutos(context)];
     Prefs.singleton()
         .addListenerForPref(Prefs.MENUS_DISABLED_PREF, changeListenerMenu, executar: false);
 
@@ -47,13 +50,7 @@ class _MenusSistemaState extends State<MenusSistema> {
   }
 
 
-  List<String> menusDisponiveis = [
-    "Compras",
-    "Produtos",
-
-//    TarefasUsuarioPage.title,
-//    ViewNavegadorCompras.title
-  ];
+  List<BaseStatelessScreen> menusDisponiveis = [];
 
   List<Icon> menusDisponiveisIcone = [
   Icon( FontAwesomeIcons.shoppingCart),
@@ -73,19 +70,19 @@ class _MenusSistemaState extends State<MenusSistema> {
     List<String> ordemMenus = Prefs.singleton().getOrdemMenu();
 
     menusDisponiveis.asMap().forEach((index, menuStr) {
-      int index_inicial = ordemMenus.indexWhere((String d) => d == menuStr);
+      int index_inicial = ordemMenus.indexWhere((String d) => d == menuStr.id);
       List<String> menusD = value;
       var menuTarefas = CupertinoSwitch(
-        value: menusD.where((t) => t == menuStr).length == 0,
+        value: menusD.where((t) => t == menuStr.id).length == 0,
         onChanged: (bool value) {
           if (mounted) {
             if (value) {
               Prefs.singleton().setTheme(Prefs.singleton().getTheme());
-              Prefs.singleton().setMenuDisabledRemove(menuStr);
+              Prefs.singleton().setMenuDisabledRemove(menuStr.id);
             } else {
-              if (verificaQuantosMenusAtivos(menuStr)) {
+              if (verificaQuantosMenusAtivos(menuStr.id)) {
                 Prefs.singleton().setTheme(Prefs.singleton().getTheme());
-                Prefs.singleton().setMenuDisabled(menuStr);
+                Prefs.singleton().setMenuDisabled(menuStr.id);
               } else {
                 if (defaultTargetPlatformNative ==
                     TargetPlatformNative.android) {
@@ -144,7 +141,7 @@ class _MenusSistemaState extends State<MenusSistema> {
 
 
                 child:Text(
-                  menuStr,
+                  menuStr.title,
                   textAlign: TextAlign.left,
                   style: TextStyle(fontSize: 16.0, color: Theme.of(context).textTheme.body2.color),
                 ),
@@ -163,7 +160,7 @@ class _MenusSistemaState extends State<MenusSistema> {
         Item(
             key: ValueKey(index),
             data: menuTarefasColumn,
-            nome: menuStr,
+            nome: menuStr.id,
             // first and last attributes affect border drawn during dragging
             isFirst: index == 0,
             isLast: index == menus.length - 1,

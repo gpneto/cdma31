@@ -53,6 +53,7 @@ void Function(
   return (store, action, next) {
     next(action);
 
+    userUpdateSubscription?.cancel();
     userUpdateSubscription =
         userRepository.getAuthenticationStateChange().listen((user) async {
       print('[DEBUG] Retorno do getAuthenticationStateChange Login:' +
@@ -65,7 +66,7 @@ void Function(
         print('[DEBUG] Buscando os Documentos no  Login:' +
             DateTime.now().toString());
 
-        userId = user.uid;
+
 
         print('[DEBUG]Adiciona o Usuário na Sessao Login:' +
             DateTime.now().toString());
@@ -97,7 +98,7 @@ void Function(
 //        });
         navigatorKey.currentState.pushReplacementNamed(Routes.home);
         store.dispatch(BuscaListaInicial());
-        store.dispatch(BuscaListaProdutosCadastrados());
+
       }
     });
   };
@@ -115,9 +116,11 @@ void Function(
   return (store, action, next) async {
     next(action);
     try {
-      userRepository.logOut();
+      await userRepository.logOut();
       cancelAllSubscriptions();
       store.dispatch(OnLogoutSuccess());
+      store.dispatch(VerifyAuthenticationState());
+
     } catch (e) {
       store.dispatch(OnLogoutFail(e));
     }
@@ -137,12 +140,12 @@ void Function(
 
     try {
       final user = await userRepository.signIn(action.user, action.pass);
-      userId = user.uid;
       store.dispatch(VerifyAuthenticationState());
       action.completer.complete();
     } on PlatformException catch (e) {
       Logger.w("Failed login", e: e);
-      action.completer.completeError(e);
+      store.dispatch(ActionStateLogin(stateLogin: StateLogin.init));
+      action.onError(e.message);
     }
   };
 }
@@ -172,7 +175,6 @@ void Function(
 
         await userRepository.newUsuario(user);
 
-        userId = user.uid;
 
         store.dispatch(VerifyAuthenticationState());
       }).catchError((err) {

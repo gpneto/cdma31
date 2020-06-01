@@ -32,7 +32,7 @@ void Function(
     try {
       produtosSubscription?.cancel();
       produtosSubscription =
-          produtosRepository.getProdutosStream().listen((lista) {
+          produtosRepository.getProdutosStream(store.state.user.uid).listen((lista) {
             store.dispatch(OnProdutosLoaded(lista));
 
           });
@@ -53,8 +53,7 @@ void Function(
     next(action);
 
     try {
-
-          produtosRepository.salvarProduto(action.produto);
+          produtosRepository.salvarProduto(action.produto,store.state.user.uid);
     } catch (e) {
       Logger.e("Failed to subscribe to lista", e: e, s: StackTrace.current);
     }

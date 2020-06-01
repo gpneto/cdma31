@@ -21,7 +21,7 @@ class Prefs {
 
   static const String THEME_PREF = "AppTheme";
   static const String THEME_NATIVE_PREF = "AppThemeNative";
-  static const String MENUS_DISABLED_PREF = "MenusSistema4";
+  static const String MENUS_DISABLED_PREF = "MenusSistema5";
   static const String MENUS_ORDEM_PREF = "MenusOrdem2";
   static const String INTO_1_PREF = "Into1_17";
 

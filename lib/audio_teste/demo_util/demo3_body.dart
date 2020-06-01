@@ -19,12 +19,14 @@
 import 'dart:io';
 
 import 'package:cdma31/application.dart';
+import 'package:cdma31/redux/app_state.dart';
 import 'package:cdma31/util/app_localization.dart';
 import 'package:cdma31/util/player_widget.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 import 'package:flutter_sound/flutter_sound.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:flutter_sound/src/util/temp_file.dart';
@@ -34,7 +36,7 @@ import 'demo_asset_player.dart';
 import 'demo_drop_downs.dart';
 import 'recorder_state.dart';
 import 'remote_player.dart';
-import 'package:flutter_incall_manager/flutter_incall_manager.dart';
+//import 'package:flutter_incall_manager/flutter_incall_manager.dart';
 import 'package:flutter_sound/src/util/recorded_audio.dart';
 import 'package:flutter_sound/src/ui/sound_recorder_ui.dart';
 import 'package:uuid/uuid.dart';
@@ -55,7 +57,7 @@ class _MainBodyState extends State<MainBody> {
 
   String recordingFile;
   Track track;
-  IncallManager incallManager = new IncallManager();
+//  IncallManager incallManager = new IncallManager();
 
   @override
   void initState() {
@@ -119,7 +121,7 @@ class _MainBodyState extends State<MainBody> {
     return StreamBuilder<QuerySnapshot>(
       stream: Firestore.instance
           .collection('users')
-          .document(userId)
+          .document(StoreProvider.of<AppState>(context).state.user.uid)
           .collection("audios")
           .snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -166,7 +168,7 @@ class _MainBodyState extends State<MainBody> {
                             Positioned(
                               right: -40.0,
                               top: -40.0,
-                              child: InkResponse(
+                              child: InkWell(
                                 onTap: () {
                                   Navigator.of(context).pop();
                                 },
@@ -199,7 +201,7 @@ class _MainBodyState extends State<MainBody> {
                                         enviadoAudio = true;
                                       });
 
-                                      await _uploadFile(a);
+                                      await _uploadFile(a, context);
 
                                       setState(() {
                                         enviadoAudio = false;
@@ -242,12 +244,12 @@ class _MainBodyState extends State<MainBody> {
   }
 }
 
-Future<void> _uploadFile(RecordedAudio a) async {
+Future<void> _uploadFile(RecordedAudio a, BuildContext context) async {
   final String uuid = Uuid().v1();
   final StorageReference ref = FirebaseStorage.instance
       .ref()
       .child('audios')
-      .child(userId)
+      .child(StoreProvider.of<AppState>(context).state.user.uid)
       .child('foo$uuid.aac');
   StorageUploadTask uploadTask = ref.putFile(
     File(a.track.trackPath),
@@ -257,7 +259,7 @@ Future<void> _uploadFile(RecordedAudio a) async {
   dynamic downloadUrl1 = await storageTaskSnapshot.ref.getDownloadURL();
 
   String pathRef = await storageTaskSnapshot.ref.getPath();
-  Firestore.instance.collection('/users/$userId/audios').add({
+  Firestore.instance.collection('/users/${StoreProvider.of<AppState>(context).state.user.uid}/audios').add({
     'nome': '$uuid.aac',
     "path": downloadUrl1,
     "ref": pathRef,

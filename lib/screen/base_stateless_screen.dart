@@ -4,4 +4,5 @@ abstract class BaseStatelessScreen  extends StatefulWidget {
   String get title;
   IconData get androidIcon;
   IconData get iosIcon;
+  String get id;
 }

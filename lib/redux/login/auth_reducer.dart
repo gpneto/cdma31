@@ -19,13 +19,12 @@ final authReducers = <AppState Function(AppState, dynamic)>[
 ];
 
 AppState _onAuthenticated(AppState state, OnAuthenticated action) {
-  userId = action.user.uid;
   AppState a = state.rebuild((a) => a..user = action.user.toBuilder());
   return a;
 }
 
 AppState _onLogout(AppState state, OnLogoutSuccess action) {
-//  return state.clear();
+  return state.clear();
 }
 
 

@@ -1,4 +1,4 @@
-
+import 'package:cdma31/screen/categoria/cadastro_categoria.dart';
 import 'package:cdma31/screen/config/home.dart';
 import 'package:cdma31/screen/lista/lista_compras.dart';
 import 'package:cdma31/screen/produtos/cadastro_produtos.dart';
@@ -8,8 +8,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-
-
 import 'package:circular_bottom_navigation/tab_item.dart';
 
 import '../../../app_config.dart';
@@ -18,15 +16,12 @@ import '../home_abstract.dart';
 import '../menu_item.dart';
 
 class IosHome extends HomeAbstract {
-
-
   factory IosHome.init(key, context, stateHome) {
-
-
     var iosHome = IosHome(key, context, stateHome);
-    iosHome.menusDisponiveis =  [
+    iosHome.menusDisponiveis = [
       ListaCompras(context),
-      CadastroProdutos(context)
+      CadastroProdutos(context),
+      CadastroCategoria(context)
     ];
 
     Prefs.singleton().addListenerForPref(
@@ -37,6 +32,7 @@ class IosHome extends HomeAbstract {
   IosHome(key, context, stateHome) : super(key, context, stateHome);
 
   List<BaseStatelessScreen> menusDisponiveis = [];
+
   @override
   PrefsListener changeListenerMenu(String key, Object value) {
     menus = [];
@@ -47,14 +43,14 @@ class IosHome extends HomeAbstract {
 
     List<String> menuList = value;
 
-
     menusDisponiveis.asMap().forEach((index, menu) {
-      if (menuList.where((t) => t == menu.title).length == 0) {
+      if (menuList.where((t) => t == menu.id).length == 0) {
         MenuItem menuItem = MenuItem(
+            id: menu.id,
             nome: menu.title,
-            menu: TabItem(
-                menu.iosIcon, menu.title, Colors.green,
-                labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+            menu: TabItem(menu.iosIcon, menu.title, Colors.green,
+                labelStyle:
+                    TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
             body: menu,
             beforeOpen: () => {},
             index: indexInfo);
@@ -63,10 +59,9 @@ class IosHome extends HomeAbstract {
       }
     });
 
-
     ordemMenus.asMap().forEach((index, menu) {
       int draggingIndex = menus.indexWhere((bt) {
-        return bt.nome == menu;
+        return bt.id == menu;
       });
 
       if (draggingIndex != -1) {
@@ -79,19 +74,17 @@ class IosHome extends HomeAbstract {
       }
     });
 
-    ConfigPage  c =  ConfigPage(pai: stateHome);
+    ConfigPage c = ConfigPage(pai: stateHome);
     MenuItem menuItem = MenuItem(
+         id: c.id,
         nome: c.title,
         menu: TabItem(FontAwesomeIcons.userCog, c.title, Colors.teal,
             labelStyle: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
-        body:c,
+        body: c,
         beforeOpen: () => {},
         index: indexInfo);
 
     menus.add(menuItem);
-
-
-
   }
 
   // In Material, this app uses the hamburger menu paradigm and flatly lists
@@ -117,17 +110,13 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
 
   bool isInConfig = false;
 
-
-
   @override
   void initState() {
     print('Abrindo a Tela Principal:' + DateTime.now().toString());
 
-
     super.initState();
 
     // cancel previous message subscription
-
 
 //    if (widget.controllerListenIncidente.hasListener) {
 //      widget.controllerListenIncidente.close();
@@ -148,10 +137,7 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
   Widget build(BuildContext context) {
     if (isInConfig) {
       selectedPos = widget.homeAbstract.menus.length - 1;
-
-
     }
-
 
     final MediaQueryData existingMediaQuery = MediaQuery.of(context);
     MediaQueryData newMediaQuery = MediaQuery.of(context);
@@ -159,14 +145,12 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
     Widget content = bodyContainer();
     EdgeInsets contentPadding = EdgeInsets.zero;
 
+    // Remove the view inset and add it back as a padding in the inner content.
+    newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
+    contentPadding =
+        EdgeInsets.only(bottom: existingMediaQuery.viewInsets.bottom);
 
-      // Remove the view inset and add it back as a padding in the inner content.
-      newMediaQuery = newMediaQuery.removeViewInsets(removeBottom: true);
-      contentPadding = EdgeInsets.only(bottom: existingMediaQuery.viewInsets.bottom);
-
-
-
-      var tabBar =  bottomNav();
+    var tabBar = bottomNav();
 
     if (
         // Only pad the content with the height of the tab bar if the tab
@@ -191,7 +175,6 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
         );
       }
     }
-
 
     content = MediaQuery(
       data: newMediaQuery,
@@ -222,27 +205,24 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
         ],
       ),
     );
-
-
   }
 
   Widget bodyContainer() {
-
     setState(() {
-      this.selectedPos  =  this.selectedPos  >= widget.homeAbstract.menus.length ? widget.homeAbstract.menus.length - 1 : this.selectedPos ;
-
+      this.selectedPos = this.selectedPos >= widget.homeAbstract.menus.length
+          ? widget.homeAbstract.menus.length - 1
+          : this.selectedPos;
     });
 
     return Padding(
       padding: EdgeInsets.only(
           bottom:
-          defaultTargetPlatformNative == TargetPlatformNative.app ? 40 : 0),
+              defaultTargetPlatformNative == TargetPlatformNative.app ? 40 : 0),
       child: widget.homeAbstract.menus[selectedPos].body,
     );
   }
 
   CupertinoTabBar bottomNav() {
-
 //    return CircularBottomNavigation(
 //      widget.homeAbstract.menus.map((menuItem) {
 //        return menuItem.menu as TabItem;
@@ -265,28 +245,28 @@ class __buildAppHomePageState extends State<_buildAppHomePage> {
 //      },
 //    );
 
-    return  CupertinoTabBar(
+    return CupertinoTabBar(
         onTap: (index) {
           setState(() {
             widget.homeAbstract.menus[index].beforeOpen();
-            if (widget.homeAbstract.menus[index].nome == "Configurações") {
+            if (widget.homeAbstract.menus[index].id == "Config") {
               isInConfig = true;
             } else {
               isInConfig = false;
             }
-            this.selectedPos  =  index >= widget.homeAbstract.menus.length ? widget.homeAbstract.menus.length - 1 : index;
+            this.selectedPos = index >= widget.homeAbstract.menus.length
+                ? widget.homeAbstract.menus.length - 1
+                : index;
           });
-
-
         },
         currentIndex: this.selectedPos,
-
-        backgroundColor:
-        CupertinoColors.quaternarySystemFill.withOpacity(0.5),
+        backgroundColor: CupertinoColors.quaternarySystemFill.withOpacity(0.5),
         activeColor: Colors.white.withOpacity(0.7),
         inactiveColor: CupertinoColors.black.withOpacity(0.6),
         items: widget.homeAbstract.menus
-            .map((menuItem) =>  BottomNavigationBarItem( icon: Icon((menuItem.menu as TabItem).icon), title: Text((menuItem.menu as TabItem).title)) )
+            .map((menuItem) => BottomNavigationBarItem(
+                icon: Icon((menuItem.menu as TabItem).icon),
+                title: Text((menuItem.menu as TabItem).title)))
             .toList());
   }
 

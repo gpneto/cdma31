@@ -1,13 +1,12 @@
-import 'package:cdma31/data/categoria_repository.dart';
 import 'package:cdma31/model/categoria.dart';
 import 'package:cdma31/model/lista.dart';
-import 'package:cdma31/model/produto.dart';
+import 'package:cdma31/model/categoria.dart';
 import 'package:cdma31/redux/app_state.dart';
-import 'package:cdma31/redux/produtos/produtos_actions.dart';
-import 'package:cdma31/screen/categoria/categoria_viewmodel.dart';
+import 'package:cdma31/redux/categoria/categoria_actions.dart';
+import 'package:cdma31/screen/categoria/card_categoria.dart';
 import 'package:cdma31/screen/lista/card_lista.dart';
 import 'package:cdma31/screen/lista/lista_compras_viewmodel.dart';
-import 'package:cdma31/screen/produtos/produtos_viewmodel.dart';
+import 'package:cdma31/screen/categoria/categoria_viewmodel.dart';
 import 'package:cdma31/scroll/scrollable_positioned_list.dart';
 import 'package:cdma31/util/app_localization.dart';
 import 'package:cdma31/util/platform_widget_native.dart';
@@ -19,29 +18,31 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../../app_config.dart';
 import '../../application.dart';
 import '../base_stateless_screen.dart';
-import 'card_produto.dart';
 
-class CadastroProdutos extends BaseStatelessScreen {
+
+class CadastroCategoria extends BaseStatelessScreen {
+
+
   final BuildContext context;
 
-  CadastroProdutos(this.context);
+  CadastroCategoria(this.context);
 
   @override
-  String get title => AppLocalizations.of(context).products;
+  String get title => AppLocalizations.of(context).category;
 
-  IconData get androidIcon => FontAwesomeIcons.shoppingBag;
-
-  @override
-  IconData get iosIcon => FontAwesomeIcons.shoppingBag;
+  IconData get androidIcon => FontAwesomeIcons.boxes;
 
   @override
-  String get id => "Produtos";
+  IconData get iosIcon => FontAwesomeIcons.boxes;
 
   @override
-  _CadastroProdutosState createState() => _CadastroProdutosState();
+  String get id => "Categoria";
+
+  @override
+  _CadastroCategoriaState createState() => _CadastroCategoriaState();
 }
 
-class _CadastroProdutosState extends State<CadastroProdutos>
+class _CadastroCategoriaState extends State<CadastroCategoria>
     with TickerProviderStateMixin {
   List<Color> cores = [
     const Color.fromRGBO(77, 85, 225, 1.0),
@@ -130,7 +131,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
     var size = MediaQuery.of(context).size;
     nomeUser = Text(
 //          "Olá, ${vm.user.name.split(' ')[0]}.",
-      AppLocalizations.of(context).products,
+      AppLocalizations.of(context).categories,
       style: TextStyle(
           fontSize: 30.0, color: Theme.of(context).textTheme.title.color),
     );
@@ -218,8 +219,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                                     decoration: new InputDecoration(
                                       prefixIcon: new Icon(Icons.search,
                                           color: Colors.white),
-                                      hintText:
-                                          AppLocalizations.of(context).search,
+                                      hintText: AppLocalizations.of(context).search,
                                     ),
                                   );
                                 } else {
@@ -251,9 +251,9 @@ class _CadastroProdutosState extends State<CadastroProdutos>
 //                        positionsView,
                         Expanded(
 //                              child: ScrollablePositionedListPage()
-                          child: StoreConnector<AppState, ProdutosViewModel>(
+                          child: StoreConnector<AppState, CategoriaViewModel>(
                             distinct: true,
-                            converter: ProdutosViewModel.fromStore,
+                            converter: CategoriaViewModel.fromStore,
                             builder: (context, vm) {
                               if (!vm.hasData) {
                                 return Center(
@@ -274,8 +274,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                                             Container(
                                               alignment: Alignment.center,
                                               child: Text(
-                                                AppLocalizations.of(context)
-                                                    .searchProducts,
+                                                AppLocalizations.of(context).searchCategories,
                                                 style: TextStyle(
                                                     color: Colors.white70,
                                                     fontSize: 17.0),
@@ -291,7 +290,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                               }
 
 //                              return MyApp();
-                              if (vm.produtos != null) {
+                              if (vm.categoria != null) {
                                 return Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -299,14 +298,11 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                                       Expanded(
                                         child: Stack(
                                           children: <Widget>[
-                                            vm.produtos.length == 0
+                                            vm.categoria.length == 0
                                                 ? Container(
 //                                                height: 400,
                                                     child: Center(
-                                                    child: Text(
-                                                        AppLocalizations.of(
-                                                                context)
-                                                            .noProducts,
+                                                    child: Text(AppLocalizations.of(context).noCategories,
                                                         style: TextStyle(
                                                             color:
                                                                 Colors.white70,
@@ -315,19 +311,19 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                                                 : Container(),
                                             ScrollablePositionedList.builder(
 //                                          reverse: true,
-                                              itemCount: vm.produtos.length,
+                                              itemCount: vm.categoria.length,
                                               itemBuilder: (context, index) {
-                                                if (vm.produtos.length == 0) {
+                                                if (vm.categoria.length == 0) {
                                                   return Container();
                                                 }
-                                                Produto produto =
-                                                    vm.produtos[index];
+                                                Categoria categoria =
+                                                    vm.categoria[index];
                                                 return Padding(
                                                     padding: EdgeInsets.only(
                                                         top:
                                                             index == 0 ? 17 : 0,
                                                         bottom: index ==
-                                                                vm.produtos
+                                                                vm.categoria
                                                                         .length -
                                                                     1
                                                             ? 20
@@ -341,43 +337,33 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                                                                     .android
                                                             ? false
                                                             : index ==
-                                                                    vm.produtos
+                                                                    vm.categoria
                                                                             .length -
                                                                         1
                                                                 ? true
                                                                 : false,
                                                         child: Dismissible(
                                                           key: ObjectKey(
-                                                              produto.id),
-                                                          child: InkWell(
-                                                            onTap: () async {
-                                                              //Abre a tela com os detalhes
-                                                              showFancyCustomDialog(
-                                                                  context,
-                                                                  produtoSelecionado:
-                                                                      produto);
-                                                            },
-                                                            child: CardProduto(
-                                                              produto: produto,
-                                                              contextpai:
-                                                                  context,
-                                                            ),
+                                                              categoria.id),
+                                                          child: CardCategoria(
+                                                            categoria: categoria,
+                                                            contextpai: context,
                                                           ),
                                                           onDismissed:
                                                               (direction) {
                                                             // Remove the item from the data source.
-//                                                          produto.path
-                                                            produto.ref
+//                                                          categoria.path
+                                                            categoria.ref
                                                                 .setData({
                                                               "status":
                                                                   "INATIVO"
                                                             }, merge: true);
                                                             // Show a snackbar. This snackbar could also contain "Undo" actions.
                                                             Scaffold.of(context)
-                                                                .showSnackBar(SnackBar(
-                                                                    content: Text(
-                                                                        AppLocalizations.of(context)
-                                                                            .removedProduct)));
+                                                                .showSnackBar(
+                                                                    SnackBar(
+                                                                        content:
+                                                                            Text(AppLocalizations.of(context).removedCategory)));
                                                           },
                                                         )));
                                               },
@@ -406,19 +392,11 @@ class _CadastroProdutosState extends State<CadastroProdutos>
     return retorno;
   }
 
-  var _itemSelecionado = null;
   final _formKey = GlobalKey<FormState>();
 
-  void showFancyCustomDialog(BuildContext context,
-      {Produto produtoSelecionado}) {
-    _itemSelecionado = null;
-    Produto produto = produtoSelecionado;
-    if (produto == null) {
-      produto = Produto();
-    } else {
-      _itemSelecionado = produto.categoria?.documentID;
-    }
 
+  void showFancyCustomDialog(BuildContext context) {
+    Categoria categoria = Categoria();
     StatefulBuilder fancyDialog = StatefulBuilder(builder: (context, setState) {
       return Dialog(
         shape: RoundedRectangleBorder(
@@ -428,7 +406,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
           ),
-          height: 350.0,
+          height: 250.0,
 //          width: 300.0,
           child: Stack(
             children: <Widget>[
@@ -454,7 +432,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    AppLocalizations.of(context).newProduct,
+                    AppLocalizations.of(context).category,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -464,7 +442,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
               ),
               Align(
                 alignment: Alignment.center,
-                child: Form(
+                child:   Form(
                   key: _formKey,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -472,16 +450,14 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: TextEditingController(text: produto.nome),
                           decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context).nameOfProduct,
+                            hintText: AppLocalizations.of(context).nameOfCategory,
                             contentPadding: EdgeInsets.all(15.0),
                             border: InputBorder.none,
                             filled: true,
                             fillColor: Colors.grey[200],
-                            hintStyle:
-                                TextStyle(color: Colors.black.withAlpha(100)),
+                            hintStyle:  TextStyle(color: Colors.black.withAlpha(100)),
+
                           ),
                           validator: (String value) {
                             if (value.isEmpty) {
@@ -490,7 +466,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                             return null;
                           },
                           onSaved: (String value) {
-                            produto = produto.rebuild((p) => p..nome = value);
+                            categoria = categoria.rebuild((p) => p..nome = value);
                           },
                           style: TextStyle(color: Colors.black),
                         ),
@@ -498,66 +474,29 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: TextFormField(
-                          controller: TextEditingController(
-                              text: produto.unidadeMedida),
                           decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context).unitOfMeasurement,
+                            hintText: AppLocalizations.of(context).description,
                             contentPadding: EdgeInsets.all(15.0),
                             border: InputBorder.none,
                             filled: true,
                             fillColor: Colors.grey[200],
-                            hintStyle:
-                                TextStyle(color: Colors.black.withAlpha(100)),
+                            hintStyle:  TextStyle(color: Colors.black.withAlpha(100)),
+
                           ),
                           validator: (String value) {
-                            if (value.isEmpty) {
-                              return AppLocalizations.of(context).enter;
-                            }
+//                            if (value.isEmpty) {
+//                              return AppLocalizations.of(context).enter;
+//                            }
                             return null;
                           },
                           onSaved: (String value) {
-                            produto = produto
-                                .rebuild((p) => p..unidadeMedida = value);
+                            categoria = categoria.rebuild((p) => p..descricao = value);
                           },
                           style: TextStyle(color: Colors.black),
                         ),
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: StoreConnector<AppState, CategoriaViewModel>(
-                            distinct: true,
-                            converter: CategoriaViewModel.fromStore,
-                            builder: (context, vm) {
-                              if (!vm.hasData) {
-                                return Container();
-                              }
-                              return DropdownButton<String>(
-                                isExpanded: true,
-                                value: _itemSelecionado,
-                                onChanged: (String novoItemSelecionado) {
-                                  _formKey.currentState.save();
-                                  setState(() {
-                                    this._itemSelecionado = novoItemSelecionado;
-//                                    this._nome =  vm.produtos.where((f) => f.id == novoItemSelecionado).toList()[0].nome;
-                                  });
-                                },
-                                items: vm.categoria
-                                    .map((Categoria dropDownStringItem) {
-                                  return DropdownMenuItem<String>(
-                                    value: dropDownStringItem.id,
-                                    child: Text(dropDownStringItem.nome),
-                                  );
-                                }).toList(),
-                                hint: Text(
-                                  AppLocalizations.of(context).category,
-                                  style: TextStyle(
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              );
-                            }),
-                      ),
+
+
                     ],
                   ),
                 ),
@@ -566,46 +505,12 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                 alignment: Alignment.bottomCenter,
                 child: InkWell(
                   onTap: () {
-                    if (_itemSelecionado == null) {
-                      // show the dialog
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: Text(
-                              AppLocalizations.of(context).attention,
-                              style: TextStyle(color: Colors.green),
-                            ),
-                            content: Text(
-                                AppLocalizations.of(context).selectProduct +
-                                    "!"),
-                            actions: [
-                              FlatButton(
-                                  child: Text("OK"),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  }),
-                            ],
-                          );
-                        },
-                      );
-                      return;
-                    }
+
                     if (_formKey.currentState.validate()) {
                       _formKey.currentState.save();
 
-                      if (_itemSelecionado != null) {
-                        produto = produto.rebuild((p) => p
-                          ..categoria = CategoriaRepository.reference(
-                              StoreProvider.of<AppState>(context)
-                                  .state
-                                  .user
-                                  .uid,
-                              _itemSelecionado));
-                      }
-
                       StoreProvider.of<AppState>(context)
-                          .dispatch(SalvarProduto(produto));
+                          .dispatch(SalvarCategoria(categoria));
 
                       Navigator.of(context).pop();
                     }
@@ -660,4 +565,6 @@ class _CadastroProdutosState extends State<CadastroProdutos>
     showDialog(
         context: context, builder: (BuildContext context) => fancyDialog);
   }
+
+
 }

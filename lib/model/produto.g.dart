@@ -19,6 +19,8 @@ class _$Produto extends Produto {
   final String unidadeMedida;
   @override
   final DocumentReference ref;
+  @override
+  final DocumentReference categoria;
 
   factory _$Produto([void Function(ProdutoBuilder) updates]) =>
       (new ProdutoBuilder()..update(updates)).build();
@@ -29,7 +31,8 @@ class _$Produto extends Produto {
       this.status,
       this.nome,
       this.unidadeMedida,
-      this.ref})
+      this.ref,
+      this.categoria})
       : super._();
 
   @override
@@ -48,17 +51,22 @@ class _$Produto extends Produto {
         status == other.status &&
         nome == other.nome &&
         unidadeMedida == other.unidadeMedida &&
-        ref == other.ref;
+        ref == other.ref &&
+        categoria == other.categoria;
   }
 
   @override
   int get hashCode {
     return $jf($jc(
         $jc(
-            $jc($jc($jc($jc(0, id.hashCode), path.hashCode), status.hashCode),
-                nome.hashCode),
-            unidadeMedida.hashCode),
-        ref.hashCode));
+            $jc(
+                $jc(
+                    $jc($jc($jc(0, id.hashCode), path.hashCode),
+                        status.hashCode),
+                    nome.hashCode),
+                unidadeMedida.hashCode),
+            ref.hashCode),
+        categoria.hashCode));
   }
 
   @override
@@ -69,7 +77,8 @@ class _$Produto extends Produto {
           ..add('status', status)
           ..add('nome', nome)
           ..add('unidadeMedida', unidadeMedida)
-          ..add('ref', ref))
+          ..add('ref', ref)
+          ..add('categoria', categoria))
         .toString();
   }
 }
@@ -102,6 +111,10 @@ class ProdutoBuilder implements Builder<Produto, ProdutoBuilder> {
   DocumentReference get ref => _$this._ref;
   set ref(DocumentReference ref) => _$this._ref = ref;
 
+  DocumentReference _categoria;
+  DocumentReference get categoria => _$this._categoria;
+  set categoria(DocumentReference categoria) => _$this._categoria = categoria;
+
   ProdutoBuilder();
 
   ProdutoBuilder get _$this {
@@ -112,6 +125,7 @@ class ProdutoBuilder implements Builder<Produto, ProdutoBuilder> {
       _nome = _$v.nome;
       _unidadeMedida = _$v.unidadeMedida;
       _ref = _$v.ref;
+      _categoria = _$v.categoria;
       _$v = null;
     }
     return this;
@@ -139,7 +153,8 @@ class ProdutoBuilder implements Builder<Produto, ProdutoBuilder> {
             status: status,
             nome: nome,
             unidadeMedida: unidadeMedida,
-            ref: ref);
+            ref: ref,
+            categoria: categoria);
     replace(_$result);
     return _$result;
   }

@@ -13,6 +13,7 @@ final produtosReducers = <AppState Function(AppState, dynamic)>[
 ];
 
 AppState _onProdutos(AppState state, OnProdutosLoaded action) {
-  AppState a = state.rebuild((a) => a..produtosonScrean =  ListBuilder(action.produtos));
+  AppState a = state.rebuild((a) => a..produtosonScrean =  ListBuilder(action.produtos)
+  ..buscandoProdutosonScrean = false);
   return a;
 }

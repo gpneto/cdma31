@@ -25,6 +25,10 @@ class _$AppState extends AppState {
   final BuiltList<Produto> produtosonScrean;
   @override
   final bool buscandoProdutosonScrean;
+  @override
+  final BuiltList<Categoria> categoriaonScrean;
+  @override
+  final bool buscandoCategoriasonScrean;
 
   factory _$AppState([void Function(AppStateBuilder) updates]) =>
       (new AppStateBuilder()..update(updates)).build();
@@ -38,7 +42,9 @@ class _$AppState extends AppState {
       this.listaProdutosonScrean,
       this.buscandoListaProdutosonScrean,
       this.produtosonScrean,
-      this.buscandoProdutosonScrean})
+      this.buscandoProdutosonScrean,
+      this.categoriaonScrean,
+      this.buscandoCategoriasonScrean})
       : super._() {
     if (listaCompras == null) {
       throw new BuiltValueNullFieldError('AppState', 'listaCompras');
@@ -53,6 +59,10 @@ class _$AppState extends AppState {
     if (buscandoProdutosonScrean == null) {
       throw new BuiltValueNullFieldError(
           'AppState', 'buscandoProdutosonScrean');
+    }
+    if (buscandoCategoriasonScrean == null) {
+      throw new BuiltValueNullFieldError(
+          'AppState', 'buscandoCategoriasonScrean');
     }
   }
 
@@ -75,7 +85,9 @@ class _$AppState extends AppState {
         listaProdutosonScrean == other.listaProdutosonScrean &&
         buscandoListaProdutosonScrean == other.buscandoListaProdutosonScrean &&
         produtosonScrean == other.produtosonScrean &&
-        buscandoProdutosonScrean == other.buscandoProdutosonScrean;
+        buscandoProdutosonScrean == other.buscandoProdutosonScrean &&
+        categoriaonScrean == other.categoriaonScrean &&
+        buscandoCategoriasonScrean == other.buscandoCategoriasonScrean;
   }
 
   @override
@@ -86,14 +98,20 @@ class _$AppState extends AppState {
                 $jc(
                     $jc(
                         $jc(
-                            $jc($jc($jc(0, user.hashCode), fcmToken.hashCode),
-                                stateLogin.hashCode),
-                            listaCompras.hashCode),
-                        buscandoLista.hashCode),
-                    listaProdutosonScrean.hashCode),
-                buscandoListaProdutosonScrean.hashCode),
-            produtosonScrean.hashCode),
-        buscandoProdutosonScrean.hashCode));
+                            $jc(
+                                $jc(
+                                    $jc(
+                                        $jc($jc(0, user.hashCode),
+                                            fcmToken.hashCode),
+                                        stateLogin.hashCode),
+                                    listaCompras.hashCode),
+                                buscandoLista.hashCode),
+                            listaProdutosonScrean.hashCode),
+                        buscandoListaProdutosonScrean.hashCode),
+                    produtosonScrean.hashCode),
+                buscandoProdutosonScrean.hashCode),
+            categoriaonScrean.hashCode),
+        buscandoCategoriasonScrean.hashCode));
   }
 
   @override
@@ -107,7 +125,9 @@ class _$AppState extends AppState {
           ..add('listaProdutosonScrean', listaProdutosonScrean)
           ..add('buscandoListaProdutosonScrean', buscandoListaProdutosonScrean)
           ..add('produtosonScrean', produtosonScrean)
-          ..add('buscandoProdutosonScrean', buscandoProdutosonScrean))
+          ..add('buscandoProdutosonScrean', buscandoProdutosonScrean)
+          ..add('categoriaonScrean', categoriaonScrean)
+          ..add('buscandoCategoriasonScrean', buscandoCategoriasonScrean))
         .toString();
   }
 }
@@ -161,6 +181,17 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
   set buscandoProdutosonScrean(bool buscandoProdutosonScrean) =>
       _$this._buscandoProdutosonScrean = buscandoProdutosonScrean;
 
+  ListBuilder<Categoria> _categoriaonScrean;
+  ListBuilder<Categoria> get categoriaonScrean =>
+      _$this._categoriaonScrean ??= new ListBuilder<Categoria>();
+  set categoriaonScrean(ListBuilder<Categoria> categoriaonScrean) =>
+      _$this._categoriaonScrean = categoriaonScrean;
+
+  bool _buscandoCategoriasonScrean;
+  bool get buscandoCategoriasonScrean => _$this._buscandoCategoriasonScrean;
+  set buscandoCategoriasonScrean(bool buscandoCategoriasonScrean) =>
+      _$this._buscandoCategoriasonScrean = buscandoCategoriasonScrean;
+
   AppStateBuilder();
 
   AppStateBuilder get _$this {
@@ -174,6 +205,8 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
       _buscandoListaProdutosonScrean = _$v.buscandoListaProdutosonScrean;
       _produtosonScrean = _$v.produtosonScrean?.toBuilder();
       _buscandoProdutosonScrean = _$v.buscandoProdutosonScrean;
+      _categoriaonScrean = _$v.categoriaonScrean?.toBuilder();
+      _buscandoCategoriasonScrean = _$v.buscandoCategoriasonScrean;
       _$v = null;
     }
     return this;
@@ -206,7 +239,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
               listaProdutosonScrean: _listaProdutosonScrean?.build(),
               buscandoListaProdutosonScrean: buscandoListaProdutosonScrean,
               produtosonScrean: _produtosonScrean?.build(),
-              buscandoProdutosonScrean: buscandoProdutosonScrean);
+              buscandoProdutosonScrean: buscandoProdutosonScrean,
+              categoriaonScrean: _categoriaonScrean?.build(),
+              buscandoCategoriasonScrean: buscandoCategoriasonScrean);
     } catch (_) {
       String _$failedField;
       try {
@@ -221,6 +256,9 @@ class AppStateBuilder implements Builder<AppState, AppStateBuilder> {
 
         _$failedField = 'produtosonScrean';
         _produtosonScrean?.build();
+
+        _$failedField = 'categoriaonScrean';
+        _categoriaonScrean?.build();
       } catch (e) {
         throw new BuiltValueNestedFieldError(
             'AppState', _$failedField, e.toString());

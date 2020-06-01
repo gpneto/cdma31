@@ -37,6 +37,9 @@ class ListaCompras extends BaseStatelessScreen {
 
   @override
   IconData get iosIcon => FontAwesomeIcons.shoppingCart;
+
+  @override
+  String get id => "Compras";
 }
 
 class _ListaComprasState extends State<ListaCompras>

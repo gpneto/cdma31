@@ -53,8 +53,8 @@ dependencies:
   flutter_sound:
     path: libs_externas/flutter_sound
 
-  flutter_incall_manager:
-    path: libs_externas/flutter-incall-manager
+#  flutter_incall_manager:
+#    path: libs_externas/flutter-incall-manager
 
   circular_bottom_navigation:
     path: libs_externas/circular_bottom_navigation
@@ -71,7 +71,7 @@ dependencies:
 #    path: /Users/guilherme_pneto/projetos/libs_externas/audioplayers
     git:
       url: https://github.com/gpneto/audioplayers.git
-      ref: master
+      ref: from-url
 
 
 

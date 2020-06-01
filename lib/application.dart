@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:io' show HttpClient, Platform, SecurityContext;
 
+import 'package:cdma31/data/categoria_repository.dart';
 import 'package:cdma31/data/lista_produtos_repository.dart';
 import 'package:cdma31/data/lista_repository.dart';
 import 'package:cdma31/redux/app_middleware.dart';
 import 'package:cdma31/redux/app_reducer.dart';
 import 'package:cdma31/redux/app_state.dart';
+import 'package:cdma31/redux/categoria/categoria_middleware.dart';
 import 'package:cdma31/redux/login/auth_actions.dart';
 import 'package:cdma31/redux/login/auth_middleware.dart';
 import 'package:cdma31/redux/produtos/produtos_middleware.dart';
@@ -46,7 +48,7 @@ import 'util/app_localization.dart';
 
 
 
-String userId;
+//String userId;
 bool log_farebase;
 class Application extends StatefulWidget {
   Application({Key key, this.title}) : super(key: key);
@@ -66,6 +68,7 @@ class _ApplicationState extends State<Application> {
   final listaRepository = ListaRepository(Firestore.instance);
   final listaProdutosRepository = ListaProdutosRepository(Firestore.instance);
   final produtosRepository = ProdutosRepository(Firestore.instance);
+  final categoriaRepository = CategoriaRepository(Firestore.instance);
 
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   StreamController<String> controllerListenIncidente;
@@ -86,6 +89,8 @@ class _ApplicationState extends State<Application> {
             _navigatorKey,
           ))
           ..addAll(createProdutosMiddleware(produtosRepository))
+          ..addAll(createCategoriaMiddleware(categoriaRepository))
+
           ..addAll(createUserMiddleware(
               FileRepository(FirebaseStorage.instance),
               ImageProcessor(),

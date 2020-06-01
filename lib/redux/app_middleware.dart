@@ -4,11 +4,13 @@
 import 'package:cdma31/data/lista_produtos_repository.dart';
 import 'package:cdma31/data/lista_repository.dart';
 import 'package:cdma31/redux/app_actions.dart';
+import 'package:cdma31/redux/produtos/produtos_actions.dart';
 import 'package:cdma31/redux/stream_subscriptions.dart';
 import 'package:cdma31/util/logger.dart';
 import "package:redux/redux.dart";
 
 import 'app_state.dart';
+import 'categoria/categoria_actions.dart';
 
 
 
@@ -35,10 +37,14 @@ void Function(
     try {
       listaSubscription?.cancel();
       listaSubscription =
-          groupRepository.getListaComptasStream().listen((lista) {
+          groupRepository.getListaComptasStream(store.state.user.uid).listen((lista) {
             store.dispatch(OnListaLoaded(lista));
 
           });
+
+      // Busca os outros cadastros
+      store.dispatch(BuscaListaProdutosCadastrados());
+      store.dispatch(BuscaListaCategoriaCadastrados());
     } catch (e) {
       Logger.e("Failed to subscribe to lista", e: e, s: StackTrace.current);
     }
@@ -81,7 +87,7 @@ void Function(
     next(action);
     try {
       listaSubscription =
-          groupRepository.salvarLista(action.lista);
+          groupRepository.salvarLista(action.lista,store.state.user.uid);
     } catch (e) {
       Logger.e("Failed to subscribe to lista", e: e, s: StackTrace.current);
     }

@@ -27,7 +27,7 @@ abstract class ProdutosViewModel
   static ProdutosViewModel fromStore(Store<AppState> store) {
     return ProdutosViewModel((m) => m
       ..produtos = store.state.produtosonScrean == null ? ListBuilder() :  store.state.produtosonScrean.toBuilder()
-      ..hasData = store.state.produtosonScrean == null ? false : !store.state.buscandoProdutosonScrean
+      ..hasData =  !store.state.buscandoProdutosonScrean
 );
 
   }

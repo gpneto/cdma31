@@ -22,7 +22,8 @@ import "package:built_collection/built_collection.dart";
 class CriarLista extends StatefulWidget {
   Lista lista;
   List<ListaProduto> produtos;
-  CriarLista(this.lista,this.produtos,{Key key}) : super(key: key);
+
+  CriarLista(this.lista, this.produtos, {Key key}) : super(key: key);
 
   @override
   _CriarListaState createState() => _CriarListaState();
@@ -40,8 +41,9 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
 
   @override
   void initState() {
-    descricao = TextEditingController(text: widget.lista == null ? "" :  widget.lista.descricao);
-    produtos = widget.produtos == null ? [] :  widget.produtos;
+    descricao = TextEditingController(
+        text: widget.lista == null ? "" : widget.lista.descricao);
+    produtos = widget.produtos == null ? [] : widget.produtos;
 
     scaleAnimation = AnimationController(
         vsync: this,
@@ -62,8 +64,6 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
     scaleAnimation.forward();
     super.initState();
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -113,9 +113,9 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                 color: Theme.of(context).iconTheme.color,
                 icon: const BackButtonIcon(),
                 onPressed: () {
-                  if(widget.lista != null){
+                  if (widget.lista != null) {
                     salvarLista();
-                  }else{
+                  } else {
                     voltar();
                   }
                 },
@@ -156,7 +156,8 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                           Text(
                             AppLocalizations.of(context).products + ":",
                             textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 25.0, color: Colors.green),
+                            style:
+                                TextStyle(fontSize: 25.0, color: Colors.green),
                             softWrap: false,
                           ),
                           Padding(
@@ -186,7 +187,8 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                                       child: FloatingActionButton(
                                         backgroundColor: Colors.green,
                                         heroTag: 'heroVerde',
-                                        onPressed: () => mostradialogo(),
+                                        onPressed: () =>
+                                            showFancyCustomDialog(context),
 //                                    backgroundColor: Colors.transparent,
                                         mini: true,
                                         child: Icon(Icons.add),
@@ -240,13 +242,13 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                       color: Colors.green,
                       onPressed: () {
                         salvarLista();
-
                       },
                       elevation: 11,
                       shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(40.0))),
-                      child:
-                          Text(AppLocalizations.of(context).save, style: TextStyle(color: Colors.white70)),
+                          borderRadius:
+                              BorderRadius.all(Radius.circular(40.0))),
+                      child: Text(AppLocalizations.of(context).save,
+                          style: TextStyle(color: Colors.white70)),
                     ),
                   )
                 ],
@@ -259,22 +261,24 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
     );
   }
 
-  voltar(){
+  voltar() {
     FocusScope.of(context).requestFocus(FocusNode());
     Navigator.of(context).pop();
   }
-  salvarLista(){
+
+  salvarLista() {
     FocusScope.of(context).requestFocus(FocusNode());
     //Salva a Lista no Firebase
     ListaAdd listaNova = ListaAdd((l) => l
       ..produtosSelecionados = ListBuilder(produtos)
       ..descricao = descricao.value.text);
-    if(widget.lista != null){
-      listaNova = listaNova.rebuild((l) => l..ref =  widget.lista.produtosRef);
+    if (widget.lista != null) {
+      listaNova = listaNova.rebuild((l) => l..ref = widget.lista.produtosRef);
       StoreProvider.of<AppState>(context).dispatch(EditaLista(listaNova));
       Navigator.of(context).pop();
-    }else{
-      StoreProvider.of<AppState>(context).dispatch(SalvaListaCompras(listaNova));
+    } else {
+      StoreProvider.of<AppState>(context)
+          .dispatch(SalvaListaCompras(listaNova));
     }
 
     Navigator.of(context).pop();
@@ -284,50 +288,81 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
   var _nome = null;
   final _formKey = GlobalKey<FormState>();
 
-  mostradialogo() async {
+  void showFancyCustomDialog(BuildContext context) {
+    _itemSelecionado = null;
     ListaProduto produtoItem = ListaProduto();
-    showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return StatefulBuilder(builder: (context, setState) {
-            return AlertDialog(
-              content: Stack(
-                overflow: Overflow.visible,
-                children: <Widget>[
-                  Positioned(
-                    right: -40.0,
-                    top: -40.0,
-                    child: InkResponse(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: CircleAvatar(
-                        child: Icon(Icons.close),
-                        backgroundColor: Colors.red,
-                      ),
-                    ),
+    StatefulBuilder fancyDialog = StatefulBuilder(builder: (context, setState) {
+      return Dialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12.0),
+        ),
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          height: 350.0,
+//          width: 300.0,
+          child: Stack(
+            children: <Widget>[
+              Container(
+                width: double.infinity,
+//                height: 400,
+                decoration: BoxDecoration(
+                  color: Colors.grey[100],
+                  borderRadius: BorderRadius.circular(12.0),
+                ),
+              ),
+              Container(
+                width: double.infinity,
+                height: 50,
+                alignment: Alignment.topCenter,
+                decoration: BoxDecoration(
+                  color: Colors.green,
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(12),
+                    topRight: Radius.circular(12),
                   ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: StoreConnector<AppState, ProdutosViewModel>(
-                              distinct: true,
-                              converter: ProdutosViewModel.fromStore,
-                              builder: (context, vm) {
-                                if (!vm.hasData) {
-                                  return Container();
-                                }
-                                return DropdownButton<String>(
+                ),
+                child: Align(
+                  alignment: Alignment.center,
+                  child: Text(
+                    AppLocalizations.of(context).selectProduct,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: StoreConnector<AppState, ProdutosViewModel>(
+                            distinct: true,
+                            converter: ProdutosViewModel.fromStore,
+                            builder: (context, vm) {
+                              if (!vm.hasData) {
+                                return Container();
+                              }
+                              return Container(
+                                width: double.infinity,
+                                child: DropdownButton<String>(
+                                  isExpanded: true,
                                   value: _itemSelecionado,
                                   onChanged: (String novoItemSelecionado) {
                                     setState(() {
-                                      this._itemSelecionado =
-                                          novoItemSelecionado;
-                                      this._nome =  vm.produtos.where((f) => f.id == novoItemSelecionado).toList()[0].nome;
+                                      this._itemSelecionado = novoItemSelecionado;
+                                      this._nome = vm.produtos
+                                          .where(
+                                              (f) => f.id == novoItemSelecionado)
+                                          .toList()[0]
+                                          .nome;
                                     });
                                   },
                                   items: vm.produtos
@@ -343,82 +378,150 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                                       color: Colors.black,
                                     ),
                                   ),
-                                );
-                              }),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context).quantity,
-                              contentPadding: EdgeInsets.all(15.0),
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.grey[200],
-                              hintStyle:  TextStyle(color: Colors.black.withAlpha(100)),
-                            ),
-                            validator: (String value) {
-                              if (value.isEmpty) {
-                                return AppLocalizations.of(context).enter;
-                              }
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              produtoItem = produtoItem
-                                  .rebuild((p) => p..quantidade = value);
-                            },
-                            style: TextStyle(color: Colors.black),
+                                ),
+                              );
+                            }),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context).quantity,
+                            contentPadding: EdgeInsets.all(15.0),
+                            border: InputBorder.none,
+                            filled: true,
+                            fillColor: Colors.grey[200],
+                            hintStyle:
+                                TextStyle(color: Colors.black.withAlpha(100)),
                           ),
+                          validator: (String value) {
+                            if (value.isEmpty) {
+                              return AppLocalizations.of(context).enter;
+                            }
+                            return null;
+                          },
+                          onSaved: (String value) {
+                            produtoItem = produtoItem
+                                .rebuild((p) => p..quantidade = value);
+                          },
+                          style: TextStyle(color: Colors.black),
                         ),
-                        Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context).note,
-                              contentPadding: EdgeInsets.all(15.0),
-                              border: InputBorder.none,
-                              filled: true,
-                              fillColor: Colors.grey[200],
-                              hintStyle:  TextStyle(color: Colors.black.withAlpha(100)),
-                            ),
-                            validator: (String value) {
-                              return null;
-                            },
-                            onSaved: (String value) {
-                              produtoItem =
-                                  produtoItem.rebuild((p) => p..obs = value);
-                            },
-                            style: TextStyle(color: Colors.black),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context).note,
+                            contentPadding: EdgeInsets.all(15.0),
+                            border: InputBorder.none,
+                            filled: true,
+                            fillColor: Colors.grey[200],
+                            hintStyle:
+                                TextStyle(color: Colors.black.withAlpha(100)),
                           ),
+                          validator: (String value) {
+                            return null;
+                          },
+                          onSaved: (String value) {
+                            produtoItem =
+                                produtoItem.rebuild((p) => p..obs = value);
+                          },
+                          style: TextStyle(color: Colors.black),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: RaisedButton(
-                            child: Text(AppLocalizations.of(context).add),
-                            onPressed: () async {
-                              if (_formKey.currentState.validate()) {
-                                _formKey.currentState.save();
-                                produtoItem = produtoItem.rebuild((p) => p
-                                  ..produto = Firestore.instance.document(
-                                      ProdutosRepository.PATH +
-                                          '/$_itemSelecionado')
-                                ..inicialNome = _nome.toString().substring(0,1));
-                                produtos.add(produtoItem);
-                                _dropDownItemSelected();
-                                Navigator.of(context).pop();
-                              }
-                            },
-                          ),
-                        )
-                      ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: InkWell(
+                  onTap: () {
+                    if(_itemSelecionado == null){
+                      // show the dialog
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return  AlertDialog(
+                            title: Text(AppLocalizations.of(context).attention,style: TextStyle(color: Colors.green),),
+                            content: Text(AppLocalizations.of(context).selectProduct+ "!"),
+                            actions: [
+                              FlatButton(
+                                child: Text("OK"),
+                                onPressed: () {  Navigator.of(context).pop();}
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                      return;
+                    }
+                    if (_formKey.currentState.validate()) {
+                      _formKey.currentState.save();
+                      produtoItem = produtoItem.rebuild((p) => p
+                        ..produto = ProdutosRepository.reference(
+                            StoreProvider.of<AppState>(context)
+                                .state
+                                .user
+                                .uid,
+                            _itemSelecionado)
+                        ..inicialNome = _nome.toString().substring(0, 1));
+                      produtos.add(produtoItem);
+                      _dropDownItemSelected();
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.blue[300],
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(12),
+                        bottomRight: Radius.circular(12),
+                      ),
+                    ),
+                    child: Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        AppLocalizations.of(context).add,
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600),
+                      ),
                     ),
                   ),
-                ],
+                ),
               ),
-            );
-          });
-        });
+              Align(
+                // These values are based on trial & error method
+                alignment: Alignment(1.05, -1.05),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    });
+    showDialog(
+        context: context, builder: (BuildContext context) => fancyDialog);
   }
+
 
   void _dropDownItemSelected() {
     setState(() {});

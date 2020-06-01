@@ -10,6 +10,7 @@ import "package:built_value/built_value.dart";
 
 import 'app_actions.dart';
 import 'app_state.dart';
+import 'categoria/categoria_reducer.dart';
 import 'login/auth_reducer.dart';
 
 /// Reducers specify how the application"s state changes in response to actions
@@ -22,7 +23,8 @@ final appReducer = combineReducers<AppState>([
   TypedReducer<AppState, OnListaProdutosLoaded>(_onListaProdutosLoaded),
   ...authReducers,
   ...userReducers,
-  ...produtosReducers
+  ...produtosReducers,
+  ...categoriasReducers
 ]);
 
 

@@ -33,8 +33,8 @@ packages:
     dependency: "direct main"
     description:
       path: "."
-      ref: master
-      resolved-ref: df227b2f3be5aacfdbe847658675e9c2b8355b60
+      ref: from-url
+      resolved-ref: d2b5b5c11cb10ae9b36c2f9e0cf2799fac76522c
       url: "https://github.com/gpneto/audioplayers.git"
     source: git
     version: "0.15.1"
@@ -295,13 +295,6 @@ packages:
     description: flutter
     source: sdk
     version: "0.0.0"
-  flutter_incall_manager:
-    dependency: "direct main"
-    description:
-      path: "libs_externas/flutter-incall-manager"
-      relative: true
-    source: path
-    version: "0.0.1"
   flutter_localizations:
     dependency: "direct main"
     description: flutter

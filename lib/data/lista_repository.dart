@@ -7,7 +7,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import '../application.dart';
 
 class ListaRepository {
-  static String PATH_LISTA_COMPRAS = '/users/$userId/listas';
+  static String PATH_LISTA_COMPRAS = '/users/{user}/listas';
 
   static const String DATA = "data";
   static const String TOTALITENS = "total_itens";
@@ -18,9 +18,9 @@ class ListaRepository {
 
   const ListaRepository(this.firestore);
 
-  Stream<List<Lista>> getListaComptasStream() {
+  Stream<List<Lista>> getListaComptasStream(String uid) {
     return firestore
-        .collection(PATH_LISTA_COMPRAS)
+        .collection(PATH_LISTA_COMPRAS.replaceAll("{user}", uid))
         .where("status", isEqualTo: "PENDENTE")
         .snapshots(includeMetadataChanges: true)
         .map((querySnapshot) {
@@ -44,10 +44,10 @@ class ListaRepository {
       ..produtosRef = doc.reference);
   }
 
-  salvarLista(ListaAdd lista) async {
+  salvarLista(ListaAdd lista, String uid) async {
     //Primeiro Cria a lista com os produtos Seleiconados
     DocumentReference docLista =
-        await firestore.collection(PATH_LISTA_COMPRAS).add({
+        await firestore.collection(PATH_LISTA_COMPRAS.replaceAll("{user}", uid)).add({
       'data': FieldValue.serverTimestamp(),
       'descricao': lista.descricao,
       'status': 'PENDENTE',

@@ -54,6 +54,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   bool primeiro = true;
 
+  bool erro = false;
+
   @override
   Widget build(BuildContext context) {
     if (primeiro) {
@@ -248,7 +250,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                       gradients: [
                         [Color(0xFF3D9942), Color(0xFF3D9942)],
                         [Color(0xFF00D824), Color(0xFF00D824)],
-                        [Color(0xFFA1FF01), Color(0xFFA1FF01)]
+                        erro ? [Color(0xFFDC143C), Color(0xFFDC143C)] : [Color(0xFFA1FF01), Color(0xFFA1FF01)]
                       ],
                       durations: [10440, 19440, 12800],
                       heightPercentages: [0.1, 0.4, 0.6],
@@ -281,6 +283,9 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   _onError(error) async {
+    setState(() {
+      erro = true;
+    });
     globalKey.currentState.showSnackBar(new SnackBar(
         duration: Duration(seconds: 4),
         backgroundColor: Colors.red,
@@ -303,7 +308,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                 Positioned(
                   right: -40.0,
                   top: -40.0,
-                  child: InkResponse(
+                  child: InkWell(
                     onTap: () {
                       Navigator.of(context).pop();
                     },

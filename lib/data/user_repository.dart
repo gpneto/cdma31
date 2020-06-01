@@ -2,6 +2,7 @@ import 'dart:io';
 
 
 import 'package:cdma31/model/user.dart';
+import 'package:cdma31/redux/stream_subscriptions.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import "package:firebase_auth/firebase_auth.dart";
@@ -124,6 +125,7 @@ class UserRepository {
   }
 
   Future<void> logOut() async {
+    cancelAllSubscriptions();
     await updateUserToken(null);
     await _firebaseAuth.signOut();
   }

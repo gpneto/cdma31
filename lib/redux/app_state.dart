@@ -1,6 +1,7 @@
 
 import "package:built_collection/built_collection.dart";
 import "package:built_value/built_value.dart";
+import 'package:cdma31/model/categoria.dart';
 import 'package:cdma31/model/lista.dart';
 import 'package:cdma31/model/lista_produto.dart';
 import 'package:cdma31/model/produto.dart';
@@ -36,6 +37,13 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   BuiltList<Produto> get produtosonScrean;
   bool get buscandoProdutosonScrean;
 
+  //*******CADASTRO DE CATEGORIAS**/
+  @nullable
+  BuiltList<Categoria> get categoriaonScrean;
+  bool get buscandoCategoriasonScrean;
+
+
+
 
   AppState._();
 
@@ -44,8 +52,17 @@ abstract class AppState implements Built<AppState, AppStateBuilder> {
   factory AppState.init() => AppState((a) => a ..stateLogin  = StateLogin.init
   ..buscandoLista =false
   ..buscandoListaProdutosonScrean = false
-  ..buscandoProdutosonScrean =  false);
+  ..buscandoProdutosonScrean =  false
+  ..buscandoCategoriasonScrean = false);
 
+
+  AppState clear() {
+    // keep the temporal fcm token even when clearing state
+    // so it can be set again on login.
+    //
+    // Add here anything else that also needs to be carried over.
+    return AppState.init();
+  }
 
 
 

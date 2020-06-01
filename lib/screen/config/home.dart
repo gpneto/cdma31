@@ -38,6 +38,9 @@ class ConfigPage extends BaseStatelessScreen {
   ConfigPage({Key key, this.pai}) ;
 
   @override
+  String get id => "Config";
+
+  @override
   _ConfigPageState createState() => _ConfigPageState();
 }
 

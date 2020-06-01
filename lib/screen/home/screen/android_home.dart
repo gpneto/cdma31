@@ -1,4 +1,5 @@
 import 'package:cdma31/redux/app_state.dart';
+import 'package:cdma31/screen/categoria/cadastro_categoria.dart';
 import 'package:cdma31/screen/config/home.dart';
 import 'package:cdma31/screen/config/user_avatar.dart';
 import 'package:cdma31/screen/config/viewmodel/user_screen_viewmodel.dart';
@@ -26,7 +27,8 @@ class AndroidHome extends HomeAbstract {
     var home = AndroidHome(key, context, stateHome);
     home.menusDisponiveis = [
       ListaCompras(context),
-      CadastroProdutos(context)
+      CadastroProdutos(context),
+      CadastroCategoria(context)
     ];
     Prefs.singleton()
         .addListenerForPref(Prefs.MENUS_DISABLED_PREF, home.changeListenerMenu);
@@ -52,8 +54,9 @@ class AndroidHome extends HomeAbstract {
     List<String> menuList = value;
 
     menusDisponiveis.asMap().forEach((index, menu) {
-      if (menuList.where((t) => t == menu.title).length == 0) {
+      if (menuList.where((t) => t == menu.id).length == 0) {
         MenuItem menuItem = MenuItem(
+            id: menu.id,
             nome: menu.title,
             menu: ListTile(
               leading: Icon(menu.androidIcon),
@@ -74,7 +77,7 @@ class AndroidHome extends HomeAbstract {
 
     ordemMenus.asMap().forEach((index, menu) {
       int draggingIndex = menus.indexWhere((bt) {
-        return bt.nome == menu;
+        return bt.id == menu;
       });
 
       if (draggingIndex != -1) {
@@ -102,9 +105,10 @@ class AndroidHome extends HomeAbstract {
 
     ConfigPage config = ConfigPage(pai: stateHome);
 
-    titleConfig = config.title;
+    titleConfig = config.id;
 
     MenuItem menuItem = MenuItem(
+        id: config.id,
         nome: config.title,
         menu: ListTile(
           leading: Icon(config.androidIcon),
@@ -254,7 +258,7 @@ class __buildMenuLateralState extends State<_buildMenuLateral> {
             selected: menuitem.index == _selectedIndex,
             onTap: () {
               menuitem.beforeOpen();
-              if (menuitem.nome == widget.titleConfig || menuitem.nome == widget.titleConfig)  {
+              if (menuitem.id == widget.titleConfig )  {
                 isInConfig = true;
               } else {
                 isInConfig = false;

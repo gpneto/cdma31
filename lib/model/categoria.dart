@@ -2,15 +2,13 @@ import "package:built_value/built_value.dart";
 import "package:built_collection/built_collection.dart";
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-part 'produto.g.dart';
+part 'categoria.g.dart';
 
-abstract class Produto implements Built<Produto, ProdutoBuilder> {
+abstract class Categoria implements Built<Categoria, CategoriaBuilder> {
 
   @nullable
   String get id;
 
-  @nullable
-  String get path;
 
   @nullable
   String get status;
@@ -19,16 +17,13 @@ abstract class Produto implements Built<Produto, ProdutoBuilder> {
   String get nome;
 
   @nullable
-  String get unidadeMedida;
-
+  String get descricao;
+  
   @nullable
   DocumentReference get ref;
 
-  @nullable
-  DocumentReference get categoria;
 
+  Categoria._();
 
-  Produto._();
-
-  factory Produto([void Function(ProdutoBuilder) updates]) = _$Produto;
+  factory Categoria([void Function(CategoriaBuilder) updates]) = _$Categoria;
 }

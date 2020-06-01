@@ -1,7 +1,10 @@
+import 'package:cdma31/redux/app_state.dart';
+import 'package:cdma31/redux/login/auth_actions.dart';
 import 'package:cdma31/screen/login/login_screan.dart';
 import 'package:cdma31/util/app_localization.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_redux/flutter_redux.dart';
 
 
 
@@ -80,11 +83,15 @@ class ImageBackgroundTeste extends StatelessWidget {
                               width: 1),
                           onPressed: () {
 
+
+                            StoreProvider.of<AppState>(context)
+                                .dispatch(LogOutAction());
+
                             //Faz o Logout
-                            FirebaseAuth.instance.signOut().then((valor){
-                              Navigator.of(context)
-                                  .pushReplacement(new MaterialPageRoute(builder: (context) => new LoginPage()));
-                            });
+//                            FirebaseAuth.instance.signOut().then((valor){
+//                              Navigator.of(context)
+//                                  .pushReplacement(new MaterialPageRoute(builder: (context) => new LoginPage()));
+//                            });
 
                           },
                         )

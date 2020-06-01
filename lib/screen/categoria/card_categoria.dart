@@ -1,21 +1,16 @@
-
 import 'dart:ui';
 
-
-import 'package:cdma31/model/produto.dart';
+import 'package:cdma31/model/categoria.dart';
+import 'package:cdma31/model/categoria.dart';
 import 'package:cdma31/util/app_localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+class CardCategoria extends StatelessWidget {
+  final Categoria categoria;
 
-
-
-
-class CardProduto extends StatelessWidget {
-  final Produto produto;
-
-  CardProduto({Key key, this.produto, contextpai}) {
+  CardCategoria({Key key, this.categoria, contextpai}) {
     context = contextpai;
   }
 
@@ -23,94 +18,95 @@ class CardProduto extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   return Container(
-        margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
-        decoration: BoxDecoration(
+    return Container(
+      margin: EdgeInsets.fromLTRB(10, 0, 10, 15),
+      decoration: BoxDecoration(
 //          image: DecorationImage(
 //            image: AssetImage("assets/incidentes/medio.png"),
 //            fit: BoxFit.cover,
 //          ),
-          color: Theme.of(context).cardColor,
-          borderRadius: BorderRadius.circular(10.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black38,
-              blurRadius: 10.0,
-              spreadRadius: 5.0,
-              offset: Offset(0.0, 0.0),
-            ),
-          ],
-        ),
-        child: Container(
+        color: Theme.of(context).cardColor,
+        borderRadius: BorderRadius.circular(10.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black38,
+            blurRadius: 10.0,
+            spreadRadius: 5.0,
+            offset: Offset(0.0, 0.0),
+          ),
+        ],
+      ),
+      child: Container(
 //          padding: EdgeInsets.fromLTRB(15, 0, 5, 8),
-          child: Stack(
-            children: <Widget>[
-              Hero(
-                tag: produto.id + "_background",
-                child: Container(
-                  decoration: BoxDecoration(
+        child: Stack(
+          children: <Widget>[
+            Hero(
+              tag: categoria.id + "_background",
+              child: Container(
+                decoration: BoxDecoration(
 //                    image: DecorationImage(
 //                      image: AssetImage("assets/incidentes/medio.png"),
 //                      fit: BoxFit.cover,
 //                    ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.start,
-                textDirection: TextDirection.ltr,
-                children: <Widget>[
-                  Container(
-                    padding: EdgeInsets.fromLTRB(15, 5, 5, 8),
-                    decoration: BoxDecoration(
-                        color: const Color.fromRGBO(63, 185, 59, 1.0),
-                        borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(0),
-                            bottomLeft: Radius.circular(0),
-                            topRight: Radius.circular(10),
-                            topLeft: Radius.circular(10))),
-                    width: double.infinity,
-                    child:  Hero(
-                      transitionOnUserGestures: true,
-                      tag: produto.id + "_title",
-                      child: Material(
-                        color: Colors.transparent,
-                        child: Text(
-                          produto.nome == null ? "": produto.nome,
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),),),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 0, 8, 0),
-                    child: getLinhaWhite(
-                      AppLocalizations.of(context).unitOfMeasurement,
-                       produto.unidadeMedida,
-                        produto.id + "unidadeMedida",
-                        alinhamento: CrossAxisAlignment.start,
-                        color: Theme.of(context).textTheme.body2.color,),
-                  ),
-                ],
-              ),
-
-            ],
-          ),
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              stops: [0.027, 0.027],
-              colors: [ Color.fromRGBO(93, 230, 26, 1), Colors.transparent],
             ),
-            borderRadius: BorderRadius.circular(10.0),
-          ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.start,
+              textDirection: TextDirection.ltr,
+              children: <Widget>[
+                Container(
+                  padding: EdgeInsets.fromLTRB(15, 5, 5, 8),
+                  decoration: BoxDecoration(
+                      color: const Color.fromRGBO(63, 185, 59, 1.0),
+                      borderRadius: BorderRadius.only(
+                          bottomRight: Radius.circular(0),
+                          bottomLeft: Radius.circular(0),
+                          topRight: Radius.circular(10),
+                          topLeft: Radius.circular(10))),
+                  width: double.infinity,
+                  child: Hero(
+                    transitionOnUserGestures: true,
+                    tag: categoria.id + "_title",
+                    child: Material(
+                      color: Colors.transparent,
+                      child: Text(
+                        categoria.nome == null ? "" : categoria.nome,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(15, 0, 8, 0),
+                  child: getLinhaWhite(
+                    AppLocalizations.of(context).description,
+                    categoria.descricao,
+                    categoria.id + "descricao",
+                    alinhamento: CrossAxisAlignment.start,
+                    color: Theme.of(context).textTheme.body2.color,),
+                ),
+              ],
+            ),
+          ],
         ),
-      );
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            stops: [0.027, 0.027],
+            colors: [Color.fromRGBO(93, 230, 26, 1), Colors.transparent],
+          ),
+          borderRadius: BorderRadius.circular(10.0),
+        ),
+      ),
+    );
   }
 }
 
@@ -263,11 +259,10 @@ Widget getLinhaWhiteTitulo(titulo, subtitulo, tag,
       )));
 }
 
-
 Widget getLinhaWhiteSimple(titulo, subtitulo,
     {alinhamento = CrossAxisAlignment.start,
-      overFlow = TextOverflow.ellipsis,
-      maxLines = 1000}) {
+    overFlow = TextOverflow.ellipsis,
+    maxLines = 1000}) {
   return Padding(
     padding: const EdgeInsets.only(left: 0, right: 0, bottom: 1, top: 1),
     child: Container(
