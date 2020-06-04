@@ -325,7 +325,7 @@ class _ListaComprasState extends State<ListaCompras>
                                                               context) {
                                                             return AlertDialog(
                                                               title:  Text(
-                                                                  AppLocalizations.of(context).confirm),
+                                                                  AppLocalizations.of(context).confirm, style: TextStyle(color: Theme.of(context).textTheme.body2.color),),
                                                               content:  Text(
                                                                   AppLocalizations.of(context).confirDelete),
                                                               actions: <Widget>[

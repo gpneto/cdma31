@@ -1,3 +1,4 @@
+import 'package:cdma31/screen/categoria/cadastro_categoria.dart';
 import 'package:cdma31/screen/lista/lista_compras.dart';
 import 'package:cdma31/screen/produtos/cadastro_produtos.dart';
 import 'package:cdma31/util/app_localization.dart';
@@ -32,7 +33,7 @@ class _MenusSistemaState extends State<MenusSistema> {
   @override
   void initState() {
     super.initState();
-    menusDisponiveis = [ListaCompras(context),CadastroProdutos(context)];
+    menusDisponiveis = [ListaCompras(context),CadastroProdutos(context),CadastroCategoria(context)];
     Prefs.singleton()
         .addListenerForPref(Prefs.MENUS_DISABLED_PREF, changeListenerMenu, executar: false);
 
@@ -54,7 +55,8 @@ class _MenusSistemaState extends State<MenusSistema> {
 
   List<Icon> menusDisponiveisIcone = [
   Icon( FontAwesomeIcons.shoppingCart),
-    Icon( FontAwesomeIcons.shoppingBag)
+    Icon( FontAwesomeIcons.shoppingBag),
+    Icon( FontAwesomeIcons.boxes)
 //    TarefasUsuarioPage.iosIcon,
 //    Icon(ViewNavegadorCompras.iosIcon)
   ];

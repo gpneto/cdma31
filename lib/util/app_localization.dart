@@ -79,6 +79,7 @@ class AppLocalizations {
       "removed_category": "Removed Category",
       "name_of_category": "Nome of Category",
       "new_product": "New Product",
+      "to_edit": "To Edit"
 
 
     },
@@ -140,6 +141,7 @@ class AppLocalizations {
       "removed_category": "Categoria Removido",
       "name_of_category": "Nome do Categoria",
       "new_product": "Novo Produto",
+      "to_edit": "Editar"
     }
   };
 
@@ -204,7 +206,7 @@ class AppLocalizations {
   }
 
   String get confirDelete {
-    return _localizedValue("confirm");
+    return _localizedValue("confirm_delete");
   }
 
   String get yes {
@@ -383,7 +385,9 @@ class AppLocalizations {
     return _localizedValue("new_product");
   }
 
-
+  String get toEdit {
+    return _localizedValue("to_edit");
+  }
 
 
 

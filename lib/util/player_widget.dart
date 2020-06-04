@@ -16,11 +16,10 @@ class PlayerWidget extends StatefulWidget {
   final PlayerMode mode;
   final bool local;
 
-  PlayerWidget(
-      {Key key,
-      @required this.url,
-      this.mode = PlayerMode.MEDIA_PLAYER,
-      this.local = false})
+  PlayerWidget({Key key,
+    @required this.url,
+    this.mode = PlayerMode.MEDIA_PLAYER,
+    this.local = false})
       : super(key: key);
 
   @override
@@ -29,11 +28,16 @@ class PlayerWidget extends StatefulWidget {
   }
 }
 
-class _PlayerWidgetState extends State<PlayerWidget> {
+class _PlayerWidgetState extends State<PlayerWidget> with  AutomaticKeepAliveClientMixin<PlayerWidget>{
+
+  @override
+  bool get wantKeepAlive => true;
+  bool initialized = false;
+
   String url;
   PlayerMode mode;
   AudioCache audioCache = AudioCache();
-  AudioPlayer _audioPlayer;
+  AudioPlayer _audioPlayer = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
   AudioPlayerState _audioPlayerState;
   Duration _duration;
   Duration _position = Duration(seconds: 0);
@@ -50,9 +54,17 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   get _isPaused => _playerState == PlayerState.paused;
 
-  get _durationText => _duration?.toString()?.split('.')?.first ?? '';
+  get _durationText =>
+      _duration
+          ?.toString()
+          ?.split('.')
+          ?.first ?? '';
 
-  get _positionText => _position?.toString()?.split('.')?.first ?? '';
+  get _positionText =>
+      _position
+          ?.toString()
+          ?.split('.')
+          ?.first ?? '';
 
   get _isPlayingThroughEarpiece =>
       _playingRouteState == PlayingRouteState.earpiece;
@@ -119,42 +131,63 @@ class _PlayerWidgetState extends State<PlayerWidget> {
               ],
             ),
           ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              SliderTheme(
-                  data: SliderTheme.of(context).copyWith(
-                    thumbShape: RoundSliderThumbShape(enabledThumbRadius: 6.0),
-                    inactiveTrackColor: Colors.blueGrey,
-                  ),
-                  child: Slider(
-                    onChanged: (v) {
-                      final Position = v * _duration.inMilliseconds;
-                      _audioPlayer
-                          .seek(Duration(milliseconds: Position.round()));
-                    },
-                    value: (_position != null &&
-                            _duration != null &&
-                            _position.inMilliseconds > 0 &&
-                            _position.inMilliseconds < _duration.inMilliseconds)
-                        ? _position.inMilliseconds / _duration.inMilliseconds
-                        : 0.0,
-                  )),
-              Text(
-                _position != null
-                    ? '${_positionText ?? ''} / ${_durationText ?? ''}'
-                    : _duration != null ? _durationText : '',
-                style: TextStyle(fontSize: 14.0),
-              ),
-            ],
-          ),
+
+          FutureBuilder(
+              initialData: false,
+              future: init(),
+              builder: (context, snapshot) {
+
+
+                if (snapshot.data == false) {
+                  return Container(
+                   child: CircularProgressIndicator(),
+
+                  );
+                } else {
+                  Duration duration = snapshot.data;
+                 return  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      SliderTheme(
+                          data: SliderTheme.of(context).copyWith(
+                            thumbShape: RoundSliderThumbShape(
+                                enabledThumbRadius: 6.0),
+                            inactiveTrackColor: Colors.blueGrey,
+                          ),
+                          child: Slider(
+                            onChanged: (v) {
+                              final Position = v * duration.inMilliseconds;
+                              _audioPlayer
+                                  .seek(
+                                  Duration(milliseconds: Position.round()));
+                            },
+                            value: (_position != null &&
+                                duration != null &&
+                                _position.inMilliseconds > 0 &&
+                                _position.inMilliseconds <
+                                    duration.inMilliseconds)
+                                ? _position.inMilliseconds /
+                                duration.inMilliseconds
+                                : 0.0,
+                          )),
+                      Text(
+                        _position != null
+                            ? '${_positionText ?? ''} / ${_durationText ?? ''}'
+                            : duration != null ? _durationText : '',
+                        style: TextStyle(fontSize: 14.0),
+                      ),
+                    ],
+                  );
+                }
+              })
+
 //          Text('State: $_audioPlayerState')
         ],
       ),
     );
   }
 
-  Future<int> _getDuration() async {
+  Future<Duration> _getDuration() async {
     File audiofile = await audioCache.loadFromUrl(widget.url);
 //    File audiofile = await audioCache.load(widget.url);
 
@@ -162,17 +195,21 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       audiofile.path,
     );
     int duration = await Future.delayed(
-        Duration(seconds: 2), () => _audioPlayer.getDuration());
+        Duration(milliseconds: 100), () => _audioPlayer.getDuration());
 
-    setState(() {
-      _duration = Duration(milliseconds: duration);
-    });
-    return duration;
+    return Duration(milliseconds: duration);
+  }
+
+  Future<Duration> init() async {
+    if (!initialized) {
+
+      _duration = await _getDuration();
+      initialized = true;
+    }
+    return _duration;
   }
 
   void _initAudioPlayer() {
-    _audioPlayer = AudioPlayer(mode: mode);
-
     play.add(_audioPlayer);
 
     if (widget.local) {
@@ -181,7 +218,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
           audioCache.fixedPlayer.startHeadlessService();
         }
       }
-      _getDuration();
+
 
 //      File audiofile = await audioCache.loadFromUrl(widget.url);
 //      await _audioPlayer.setUrl(
@@ -200,7 +237,9 @@ class _PlayerWidgetState extends State<PlayerWidget> {
       setState(() => _duration = duration);
 
       // TODO implemented for iOS, waiting for android impl
-      if (Theme.of(context).platform == TargetPlatform.iOS) {
+      if (Theme
+          .of(context)
+          .platform == TargetPlatform.iOS) {
         // (Optional) listen for notification updates in the background
         _audioPlayer.startHeadlessService();
 
@@ -220,17 +259,18 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     });
 
     _positionSubscription =
-        _audioPlayer.onAudioPositionChanged.listen((p) => setState(() {
+        _audioPlayer.onAudioPositionChanged.listen((p) =>
+            setState(() {
               _position = p;
             }));
 
     _playerCompleteSubscription =
         _audioPlayer.onPlayerCompletion.listen((event) {
-      _onComplete();
-      setState(() {
-        _position = _duration;
-      });
-    });
+          _onComplete();
+          setState(() {
+            _position = _duration;
+          });
+        });
 
     _playerErrorSubscription = _audioPlayer.onPlayerError.listen((msg) {
       print('audioPlayer error : $msg');
@@ -262,13 +302,15 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   Future<int> _play() async {
     play.forEach((element) {
-      element.pause();
+      if (element.state == AudioPlayerState.PLAYING) {
+        element.pause();
+      }
     });
 
     final playPosition = (_position != null &&
-            _duration != null &&
-            _position.inMilliseconds > 0 &&
-            _position.inMilliseconds < _duration.inMilliseconds)
+        _duration != null &&
+        _position.inMilliseconds > 0 &&
+        _position.inMilliseconds < _duration.inMilliseconds)
         ? _position
         : null;
 
@@ -298,10 +340,11 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   Future<int> _earpieceOrSpeakersToggle() async {
     final result = await _audioPlayer.earpieceOrSpeakersToggle();
     if (result == 1)
-      setState(() => _playingRouteState =
-          _playingRouteState == PlayingRouteState.speakers
-              ? PlayingRouteState.earpiece
-              : PlayingRouteState.speakers);
+      setState(() =>
+      _playingRouteState =
+      _playingRouteState == PlayingRouteState.speakers
+          ? PlayingRouteState.earpiece
+          : PlayingRouteState.speakers);
     return result;
   }
 

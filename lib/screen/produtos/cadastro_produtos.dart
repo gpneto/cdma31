@@ -436,7 +436,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                 width: double.infinity,
 //                height: 400,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12.0),
                 ),
               ),
@@ -454,7 +454,7 @@ class _CadastroProdutosState extends State<CadastroProdutos>
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    AppLocalizations.of(context).newProduct,
+                    produto.ref != null ? AppLocalizations.of(context).toEdit :  AppLocalizations.of(context).newProduct,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,

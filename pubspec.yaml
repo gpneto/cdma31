@@ -50,8 +50,8 @@ dependencies:
   get_version: 0.2.2
   sqflite: any
   flutter_sticky_header: ^0.4.2
-  flutter_sound:
-    path: libs_externas/flutter_sound
+  flutter_sound: ^5.0.1
+#    path: libs_externas/flutter_sound
 
 #  flutter_incall_manager:
 #    path: libs_externas/flutter-incall-manager

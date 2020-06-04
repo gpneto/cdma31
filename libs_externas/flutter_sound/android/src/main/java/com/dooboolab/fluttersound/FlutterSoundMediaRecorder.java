@@ -148,7 +148,7 @@ public class FlutterSoundMediaRecorder
 		}
 		catch ( Exception e )
 		{
-			Log.e ( TAG, "Exception: ", e );
+			Log.e ( TAG, "Exception1: ", e );
 			//
 			try
 			{

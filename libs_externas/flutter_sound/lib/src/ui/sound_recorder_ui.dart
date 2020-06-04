@@ -260,7 +260,7 @@ class SoundRecorderUIState extends State<SoundRecorderUI> {
               //'${await (await widget.audio).track.identity})'));
           _recorder.startRecorder(toFile: widget.audio.track.trackPath,
             //widget.audio.track,
-            codec: Codec.aacMP4
+            codec: Codec.aacADTS
           );
           _onStarted(wasUser: true);
 

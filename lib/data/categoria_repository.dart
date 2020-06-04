@@ -38,11 +38,23 @@ class CategoriaRepository {
 
 
   salvarCategoria(Categoria categoria,String uid) {
-    firestore.collection(PATH.replaceAll("{user}", uid)).add({
-      'nome': categoria.nome,
-      'descricao': categoria.descricao,
-      "status": "ATIVO"
-    });
+
+    if (categoria.ref != null) {
+      categoria.ref.setData({
+        'nome': categoria.nome,
+        'descricao': categoria.descricao,
+        "status": "ATIVO"
+      }, merge: true);
+    } else {
+      firestore.collection(PATH.replaceAll("{user}", uid)).add({
+        'nome': categoria.nome,
+        'descricao': categoria.descricao,
+        "status": "ATIVO"
+      });
+    }
+
+
+
   }
 
   removerCategoria(DocumentReference categoria) {

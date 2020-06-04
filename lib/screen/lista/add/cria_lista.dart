@@ -96,7 +96,7 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                       Material(
                         color: Colors.transparent,
                         child: Text(
-                          AppLocalizations.of(context).newList,
+                          widget.lista != null ? AppLocalizations.of(context).toEdit :  AppLocalizations.of(context).newList,
                           textAlign: TextAlign.right,
                           style: TextStyle(fontSize: 25.0),
                           softWrap: false,
@@ -308,7 +308,7 @@ class _CriarListaState extends State<CriarLista> with TickerProviderStateMixin {
                 width: double.infinity,
 //                height: 400,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12.0),
                 ),
               ),

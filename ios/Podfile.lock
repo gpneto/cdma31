@@ -332,8 +332,6 @@ PODS:
     - FirebaseCore (~> 6.6)
     - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
-  - flutter_incall_manager (0.0.1):
-    - Flutter
   - flutter_native_image (0.0.1):
     - Flutter
   - flutter_plugin_android_lifecycle (0.0.1):
@@ -454,7 +452,6 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
-  - flutter_incall_manager (from `.symlinks/plugins/flutter_incall_manager/ios`)
   - flutter_native_image (from `.symlinks/plugins/flutter_native_image/ios`)
   - flutter_plugin_android_lifecycle (from `.symlinks/plugins/flutter_plugin_android_lifecycle/ios`)
   - flutter_sound (from `.symlinks/plugins/flutter_sound/ios`)
@@ -525,8 +522,6 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
-  flutter_incall_manager:
-    :path: ".symlinks/plugins/flutter_incall_manager/ios"
   flutter_native_image:
     :path: ".symlinks/plugins/flutter_native_image/ios"
   flutter_plugin_android_lifecycle:
@@ -583,7 +578,6 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 58cb17277641a0084d98d4951ba1f1fb0588c8c6
   FirebaseStorage: f4f39ae834a7145963b913f54e2f24a9db1d8fac
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
-  flutter_incall_manager: 1a6aea8d37fb46d63aaa30ac7ea225e121704eab
   flutter_native_image: 9c0b7451838484458e5b0fae007b86a4c2d4bdfe
   flutter_plugin_android_lifecycle: dc0b544e129eebb77a6bfb1239d4d1c673a60a35
   flutter_sound: 9d800e8b986454e3c037d78f10ce52245daef858

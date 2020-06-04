@@ -326,9 +326,9 @@ packages:
   flutter_sound:
     dependency: "direct main"
     description:
-      path: "libs_externas/flutter_sound"
-      relative: true
-    source: path
+      name: flutter_sound
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "5.0.1"
   flutter_spinkit:
     dependency: transitive

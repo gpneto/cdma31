@@ -36,6 +36,7 @@ import 'demo_asset_player.dart';
 import 'demo_drop_downs.dart';
 import 'recorder_state.dart';
 import 'remote_player.dart';
+
 //import 'package:flutter_incall_manager/flutter_incall_manager.dart';
 import 'package:flutter_sound/src/util/recorded_audio.dart';
 import 'package:flutter_sound/src/ui/sound_recorder_ui.dart';
@@ -53,10 +54,13 @@ class MainBody extends StatefulWidget {
 }
 
 class _MainBodyState extends State<MainBody> {
+
+
   bool initialized = false;
 
   String recordingFile;
   Track track;
+
 //  IncallManager incallManager = new IncallManager();
 
   @override
@@ -65,7 +69,7 @@ class _MainBodyState extends State<MainBody> {
     tempFile(suffix: '.aac').then((path) {
       recordingFile = path;
       track = Track(trackPath: recordingFile);
-      track.trackAuthor = 'Brett';
+      track.trackAuthor = 'Audio';
       setState(() {});
     });
   }
@@ -102,17 +106,16 @@ class _MainBodyState extends State<MainBody> {
               color: Colors.white,
             );
           } else {
-//            final dropdowns = Dropdowns(
-//                onCodecChanged: (codec) =>
-//                    ActiveCodec().setCodec(withUI: false, codec: codec));
 
-            return ListView(
+            return Column(
               children: <Widget>[
                 _buildRecorder(track),
 //                dropdowns,
-                buildPlayBars(),
+                Expanded(child: buildPlayBars()),
               ],
             );
+
+
           }
         });
   }
@@ -123,26 +126,71 @@ class _MainBodyState extends State<MainBody> {
           .collection('users')
           .document(StoreProvider.of<AppState>(context).state.user.uid)
           .collection("audios")
+          .where("status", isEqualTo: "ATIVO")
           .snapshots(),
+
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
           case ConnectionState.waiting:
             return new Text('Loading...');
           default:
-            return new ListView(
-              shrinkWrap: true,
-              children:
-                  snapshot.data.documents.map((DocumentSnapshot document) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: PlayerWidget(
-                    url: document.data["path"].toString(),
-                    local: true,
+            return ListView(
+
+              children: snapshot.data.documents.map((DocumentSnapshot document) {
+                return Dismissible(
+                  key:  ObjectKey(document.documentID),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: PlayerWidget(
+                      key:  ObjectKey(document.documentID),
+                      url: document.data["path"].toString(),
+                      local: true,
+                    ),
                   ),
+                  confirmDismiss: (DismissDirection direction) async {
+                    return await showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: Text(
+                            AppLocalizations.of(context).confirm,
+                            style: TextStyle(
+                                color: Theme.of(context).textTheme.body2.color),
+                          ),
+                          content:
+                          Text(AppLocalizations.of(context).confirDelete),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop(true);
+
+
+                                  document.reference.setData(
+                                      {"status": "INATIVO"},
+                                      merge: true);
+                                },
+                                child: Text(AppLocalizations.of(context).yes)),
+                            FlatButton(
+                              onPressed: () => Navigator.of(context).pop(false),
+                              child: Text(AppLocalizations.of(context).no),
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  },
                 );
               }).toList(),
+//              itemExtent: 110.0,
             );
+
+
+
+
+
+
         }
       },
     );
@@ -159,7 +207,9 @@ class _MainBodyState extends State<MainBody> {
             return AlertDialog(
                 content: enviadoAudio
                     ? Container(
-                        child: CircularProgressIndicator(),
+                  height: 50,
+                        width: 50,
+                        child: Center(child: CircularProgressIndicator()),
                       )
                     : Container(
                         child: Stack(
@@ -259,7 +309,10 @@ Future<void> _uploadFile(RecordedAudio a, BuildContext context) async {
   dynamic downloadUrl1 = await storageTaskSnapshot.ref.getDownloadURL();
 
   String pathRef = await storageTaskSnapshot.ref.getPath();
-  Firestore.instance.collection('/users/${StoreProvider.of<AppState>(context).state.user.uid}/audios').add({
+  Firestore.instance
+      .collection(
+          '/users/${StoreProvider.of<AppState>(context).state.user.uid}/audios')
+      .add({
     'nome': '$uuid.aac',
     "path": downloadUrl1,
     "ref": pathRef,

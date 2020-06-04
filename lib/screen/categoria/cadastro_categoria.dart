@@ -345,10 +345,22 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
                                                         child: Dismissible(
                                                           key: ObjectKey(
                                                               categoria.id),
-                                                          child: CardCategoria(
-                                                            categoria: categoria,
-                                                            contextpai: context,
-                                                          ),
+                                                          child:
+                                                          InkWell(
+                                                            onTap: () async {
+                                                              //Abre a tela com os detalhes
+                                                              showFancyCustomDialog(
+                                                                  context,
+                                                                  cateforiaSelecionada:
+                                                                  categoria);
+                                                            },
+                                                            child: CardCategoria(
+                                                              categoria: categoria,
+                                                              contextpai: context,
+                                                            ),
+                                                          )
+
+                                                          ,
                                                           onDismissed:
                                                               (direction) {
                                                             // Remove the item from the data source.
@@ -395,8 +407,13 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
   final _formKey = GlobalKey<FormState>();
 
 
-  void showFancyCustomDialog(BuildContext context) {
-    Categoria categoria = Categoria();
+  void showFancyCustomDialog(BuildContext context, {Categoria cateforiaSelecionada}) {
+    Categoria categoria = cateforiaSelecionada;
+
+    if (categoria == null) {
+      categoria = Categoria();
+    }
+
     StatefulBuilder fancyDialog = StatefulBuilder(builder: (context, setState) {
       return Dialog(
         shape: RoundedRectangleBorder(
@@ -405,6 +422,7 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(20.0),
+
           ),
           height: 250.0,
 //          width: 300.0,
@@ -414,7 +432,7 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
                 width: double.infinity,
 //                height: 400,
                 decoration: BoxDecoration(
-                  color: Colors.grey[100],
+                  color: Theme.of(context).cardColor,
                   borderRadius: BorderRadius.circular(12.0),
                 ),
               ),
@@ -432,7 +450,7 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
                 child: Align(
                   alignment: Alignment.center,
                   child: Text(
-                    AppLocalizations.of(context).category,
+                    categoria.ref != null ? AppLocalizations.of(context).toEdit :   AppLocalizations.of(context).category,
                     style: TextStyle(
                         color: Colors.white,
                         fontSize: 20,
@@ -450,6 +468,7 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: TextEditingController(text: categoria.nome),
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).nameOfCategory,
                             contentPadding: EdgeInsets.all(15.0),
@@ -474,6 +493,7 @@ class _CadastroCategoriaState extends State<CadastroCategoria>
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: TextFormField(
+                          controller: TextEditingController(text: categoria.descricao),
                           decoration: InputDecoration(
                             hintText: AppLocalizations.of(context).description,
                             contentPadding: EdgeInsets.all(15.0),
